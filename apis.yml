@@ -1,0 +1,7 @@
+aid: state-street
+url: https://raw.githubusercontent.com/api-evangelist/state-street/refs/heads/main/apis.yml
+modified: '2026-03-21'
+apis: []
+common:
+  - type: Website
+    url: https://www.state-street.com
