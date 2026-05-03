@@ -1,0 +1,368 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "State Street Alpha Data Platform API"
+  description: "Shared capability for the State Street Alpha Data Platform API providing portfolio, positions, transactions, performance, and risk analytics."
+  tags:
+    - Financial Services
+    - Investment Management
+    - Portfolio
+    - Institutional
+  created: "2026-05-02"
+  modified: "2026-05-02"
+
+binds:
+  - namespace: env
+    keys:
+      STATE_STREET_CLIENT_ID: STATE_STREET_CLIENT_ID
+      STATE_STREET_CLIENT_SECRET: STATE_STREET_CLIENT_SECRET
+
+capability:
+  consumes:
+    - type: http
+      namespace: state-street-alpha
+      baseUri: https://api.statestreet.com/v1
+      description: "State Street Alpha Data Platform API"
+      authentication:
+        type: bearer
+        token: "{{STATE_STREET_ACCESS_TOKEN}}"
+      resources:
+        - name: portfolios
+          path: /portfolios
+          description: "Portfolio listing and management"
+          operations:
+            - name: list-portfolios
+              method: GET
+              description: "List all accessible portfolios"
+              inputParameters:
+                - name: pageSize
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Portfolios per page"
+                - name: pageToken
+                  in: query
+                  type: string
+                  required: false
+                  description: "Pagination token"
+                - name: portfolioType
+                  in: query
+                  type: string
+                  required: false
+                  description: "Filter by portfolio type"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: portfolio-detail
+          path: /portfolios/{portfolioId}
+          description: "Individual portfolio operations"
+          operations:
+            - name: get-portfolio
+              method: GET
+              description: "Get portfolio details by ID"
+              inputParameters:
+                - name: portfolioId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Portfolio identifier"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: portfolio-positions
+          path: /portfolios/{portfolioId}/positions
+          description: "Portfolio position operations"
+          operations:
+            - name: list-portfolio-positions
+              method: GET
+              description: "List portfolio positions as of a given date"
+              inputParameters:
+                - name: portfolioId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Portfolio identifier"
+                - name: asOfDate
+                  in: query
+                  type: string
+                  required: false
+                  description: "As-of date for positions"
+                - name: assetClass
+                  in: query
+                  type: string
+                  required: false
+                  description: "Filter by asset class"
+                - name: pageSize
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Positions per page"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: portfolio-transactions
+          path: /portfolios/{portfolioId}/transactions
+          description: "Portfolio transaction history"
+          operations:
+            - name: list-portfolio-transactions
+              method: GET
+              description: "List transactions for a portfolio over a date range"
+              inputParameters:
+                - name: portfolioId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Portfolio identifier"
+                - name: startDate
+                  in: query
+                  type: string
+                  required: true
+                  description: "Start date"
+                - name: endDate
+                  in: query
+                  type: string
+                  required: true
+                  description: "End date"
+                - name: transactionType
+                  in: query
+                  type: string
+                  required: false
+                  description: "Filter by transaction type"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: portfolio-performance
+          path: /portfolios/{portfolioId}/performance
+          description: "Portfolio performance measurement"
+          operations:
+            - name: get-portfolio-performance
+              method: GET
+              description: "Get performance measurement for a portfolio"
+              inputParameters:
+                - name: portfolioId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Portfolio identifier"
+                - name: startDate
+                  in: query
+                  type: string
+                  required: true
+                  description: "Measurement start date"
+                - name: endDate
+                  in: query
+                  type: string
+                  required: true
+                  description: "Measurement end date"
+                - name: frequency
+                  in: query
+                  type: string
+                  required: false
+                  description: "Calculation frequency"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: portfolio-risk
+          path: /portfolios/{portfolioId}/risk
+          description: "Portfolio risk analytics"
+          operations:
+            - name: get-portfolio-risk
+              method: GET
+              description: "Get risk analytics for a portfolio"
+              inputParameters:
+                - name: portfolioId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Portfolio identifier"
+                - name: asOfDate
+                  in: query
+                  type: string
+                  required: false
+                  description: "As-of date"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+  exposes:
+    - type: rest
+      port: 8100
+      namespace: state-street-alpha-rest
+      resources:
+        - path: /v1/portfolios
+          name: portfolios
+          description: "Portfolio listing"
+          operations:
+            - method: GET
+              name: list-portfolios
+              description: "List portfolios"
+              call: "state-street-alpha.list-portfolios"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/portfolios/{portfolioId}
+          name: portfolio-detail
+          description: "Portfolio detail"
+          operations:
+            - method: GET
+              name: get-portfolio
+              description: "Get portfolio"
+              call: "state-street-alpha.get-portfolio"
+              with:
+                portfolioId: "rest.portfolioId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/portfolios/{portfolioId}/positions
+          name: portfolio-positions
+          description: "Portfolio positions"
+          operations:
+            - method: GET
+              name: list-portfolio-positions
+              description: "List positions"
+              call: "state-street-alpha.list-portfolio-positions"
+              with:
+                portfolioId: "rest.portfolioId"
+                asOfDate: "rest.asOfDate"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/portfolios/{portfolioId}/transactions
+          name: portfolio-transactions
+          description: "Portfolio transactions"
+          operations:
+            - method: GET
+              name: list-portfolio-transactions
+              description: "List transactions"
+              call: "state-street-alpha.list-portfolio-transactions"
+              with:
+                portfolioId: "rest.portfolioId"
+                startDate: "rest.startDate"
+                endDate: "rest.endDate"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/portfolios/{portfolioId}/performance
+          name: portfolio-performance
+          description: "Portfolio performance"
+          operations:
+            - method: GET
+              name: get-portfolio-performance
+              description: "Get performance"
+              call: "state-street-alpha.get-portfolio-performance"
+              with:
+                portfolioId: "rest.portfolioId"
+                startDate: "rest.startDate"
+                endDate: "rest.endDate"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/portfolios/{portfolioId}/risk
+          name: portfolio-risk
+          description: "Portfolio risk"
+          operations:
+            - method: GET
+              name: get-portfolio-risk
+              description: "Get risk analytics"
+              call: "state-street-alpha.get-portfolio-risk"
+              with:
+                portfolioId: "rest.portfolioId"
+                asOfDate: "rest.asOfDate"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9100
+      namespace: state-street-alpha-mcp
+      transport: http
+      tools:
+        - name: list-portfolios
+          description: "List institutional investment portfolios accessible via State Street Alpha"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "state-street-alpha.list-portfolios"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-portfolio
+          description: "Get details of a specific State Street Alpha portfolio"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "state-street-alpha.get-portfolio"
+          with:
+            portfolioId: "tools.portfolioId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-portfolio-positions
+          description: "List current positions in a portfolio as of a given date"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "state-street-alpha.list-portfolio-positions"
+          with:
+            portfolioId: "tools.portfolioId"
+            asOfDate: "tools.asOfDate"
+            assetClass: "tools.assetClass"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-portfolio-transactions
+          description: "List transaction history for a portfolio over a date range"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "state-street-alpha.list-portfolio-transactions"
+          with:
+            portfolioId: "tools.portfolioId"
+            startDate: "tools.startDate"
+            endDate: "tools.endDate"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-portfolio-performance
+          description: "Get performance measurement and attribution for a portfolio"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "state-street-alpha.get-portfolio-performance"
+          with:
+            portfolioId: "tools.portfolioId"
+            startDate: "tools.startDate"
+            endDate: "tools.endDate"
+            frequency: "tools.frequency"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-portfolio-risk
+          description: "Get risk analytics including VaR, tracking error, and factor exposures for a portfolio"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "state-street-alpha.get-portfolio-risk"
+          with:
+            portfolioId: "tools.portfolioId"
+            asOfDate: "tools.asOfDate"
+          outputParameters:
+            - type: object
+              mapping: "$."

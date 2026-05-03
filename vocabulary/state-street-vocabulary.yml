@@ -1,0 +1,159 @@
+name: State Street Vocabulary
+description: >-
+  Domain vocabulary for State Street financial services, institutional investment
+  management, portfolio analytics, ETF operations, and custody services.
+version: 1.0.0
+terms:
+  - term: Portfolio
+    definition: >-
+      A collection of financial investments held by an institutional investor,
+      managed according to a specific investment mandate, risk profile, and benchmark.
+      State Street provides custody, accounting, and analytics services for portfolios
+      across all major asset classes.
+    related:
+      - Position
+      - Benchmark
+      - Mandate
+
+  - term: Position
+    definition: >-
+      An individual security holding within a portfolio, representing the quantity,
+      market value, cost basis, and unrealized gain/loss for a specific financial
+      instrument as of a given date.
+    related:
+      - Portfolio
+      - Security
+      - MarketValue
+
+  - term: AlphaDataPlatform
+    definition: >-
+      State Street's cloud-native front-to-back investment management platform,
+      built on Snowflake and Microsoft Azure, that provides institutional investors
+      with near real-time portfolio data, analytics, and reporting across the
+      entire investment lifecycle.
+    related:
+      - Portfolio
+      - API
+      - DataManagement
+
+  - term: NetAssetValue
+    definition: >-
+      (NAV) The per-share value of a fund calculated by dividing the total value
+      of the fund's assets minus liabilities by the number of outstanding shares.
+      State Street provides driverless NAV calculation using machine learning
+      automation.
+    related:
+      - MutualFund
+      - ETF
+      - Accounting
+
+  - term: AuthorizedParticipant
+    definition: >-
+      (AP) A financial institution approved by an ETF sponsor to create and redeem
+      large blocks of ETF shares (creation units) directly with the fund in exchange
+      for the underlying basket of securities. Authorized participants access State
+      Street Fund Connect via API.
+    related:
+      - ETF
+      - FundConnect
+      - CreationUnit
+
+  - term: CreationUnit
+    definition: >-
+      The standard block size for ETF creation and redemption transactions, typically
+      50,000 shares. Authorized participants deliver or receive a basket of securities
+      plus a cash component in exchange for creation units.
+    related:
+      - AuthorizedParticipant
+      - ETF
+      - InKindBasket
+
+  - term: FundConnect
+    definition: >-
+      State Street's global online platform for ETF creation and redemption order
+      management, supporting authorized participants across all major markets with
+      API access via FIX and XML protocols.
+    related:
+      - ETF
+      - AuthorizedParticipant
+      - Order
+
+  - term: TimeWeightedReturn
+    definition: >-
+      (TWR) A method for calculating investment performance that eliminates the
+      distorting effects of cash flows, allowing fair comparison between portfolio
+      managers. State Street supports TWR calculation for performance attribution.
+    related:
+      - Performance
+      - Attribution
+      - Benchmark
+
+  - term: TrackingError
+    definition: >-
+      A measure of how closely a portfolio's returns follow its benchmark index,
+      expressed as the standard deviation of the difference between portfolio and
+      benchmark returns. Annualized tracking error is a key risk metric.
+    related:
+      - Benchmark
+      - Risk
+      - Portfolio
+
+  - term: ValueAtRisk
+    definition: >-
+      (VaR) A statistical measure of the potential maximum loss in portfolio value
+      over a specified time period at a given confidence level (e.g., 95% or 99%).
+      State Street's TrueView risk analytics provides VaR calculations.
+    related:
+      - Risk
+      - Portfolio
+      - StressTest
+
+  - term: CustodyAssets
+    definition: >-
+      Financial assets held in safekeeping by State Street on behalf of institutional
+      clients. State Street is one of the world's largest custodian banks with nearly
+      $40 trillion in assets under custody.
+    related:
+      - Custodian
+      - Settlement
+      - Safekeeping
+
+  - term: TradeSettlement
+    definition: >-
+      The process by which the buyer delivers payment and the seller delivers securities
+      to complete a transaction. State Street provides post-trade settlement services
+      across global markets.
+    related:
+      - Trade
+      - Settlement
+      - Custody
+
+  - term: Attribution
+    definition: >-
+      The analysis of investment performance that identifies the sources of returns
+      relative to a benchmark, including sector allocation, security selection, and
+      currency effects. State Street supports top-down, bottom-up, and enhanced
+      attribution methodologies.
+    related:
+      - Performance
+      - Benchmark
+      - Portfolio
+
+  - term: OAuth2ClientCredentials
+    definition: >-
+      The authentication flow used by State Street APIs per RFC 6749 Section 4.4.2,
+      where applications authenticate using a client ID and secret to obtain access
+      tokens. All API access requires multifactor authentication.
+    related:
+      - Authentication
+      - API
+      - Security
+
+  - term: CorrelationID
+    definition: >-
+      A unique identifier (X-Correlation-ID header) included in API requests for
+      distributed tracing and debugging across State Street's microservices infrastructure.
+    related:
+      - API
+      - Debugging
+      - RequestTracing

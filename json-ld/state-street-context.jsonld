@@ -1,0 +1,105 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "fibo": "https://spec.edmcouncil.org/fibo/ontology/",
+    "statestreet": "https://developer.statestreet.com/ontology/",
+
+    "Portfolio": "fibo:Portfolio",
+    "Position": "fibo:SecurityPosition",
+    "Transaction": "fibo:Trade",
+    "Performance": "fibo:PortfolioPerformance",
+    "RiskAnalytics": "fibo:RiskMeasure",
+    "ETFOrder": "fibo:Order",
+
+    "portfolioId": {
+      "@id": "statestreet:portfolioId",
+      "@type": "schema:Identifier"
+    },
+    "portfolioName": "schema:name",
+    "portfolioType": "statestreet:portfolioType",
+    "baseCurrency": {
+      "@id": "schema:currency",
+      "@type": "schema:Text"
+    },
+    "inceptionDate": {
+      "@id": "schema:foundingDate",
+      "@type": "schema:Date"
+    },
+    "totalMarketValue": {
+      "@id": "statestreet:totalMarketValue",
+      "@type": "schema:MonetaryAmount"
+    },
+    "benchmarkId": "statestreet:benchmarkId",
+    "custodian": "schema:provider",
+    "securityId": {
+      "@id": "fibo:hasIdentifier",
+      "@type": "schema:Identifier"
+    },
+    "securityName": "schema:name",
+    "assetClass": "fibo:AssetClass",
+    "quantity": {
+      "@id": "fibo:lotSize",
+      "@type": "schema:Number"
+    },
+    "marketValue": {
+      "@id": "fibo:marketValue",
+      "@type": "schema:MonetaryAmount"
+    },
+    "price": {
+      "@id": "schema:price",
+      "@type": "schema:Number"
+    },
+    "currency": {
+      "@id": "schema:priceCurrency",
+      "@type": "schema:Text"
+    },
+    "costBasis": {
+      "@id": "fibo:costBasis",
+      "@type": "schema:MonetaryAmount"
+    },
+    "unrealizedGainLoss": {
+      "@id": "fibo:unrealizedGainLoss",
+      "@type": "schema:Number"
+    },
+    "weight": {
+      "@id": "fibo:portfolioWeight",
+      "@type": "schema:Number"
+    },
+    "tradeDate": {
+      "@id": "fibo:tradeDate",
+      "@type": "schema:Date"
+    },
+    "settlementDate": {
+      "@id": "fibo:settlementDate",
+      "@type": "schema:Date"
+    },
+    "netAmount": {
+      "@id": "fibo:netAmount",
+      "@type": "schema:MonetaryAmount"
+    },
+    "fundId": "statestreet:fundId",
+    "ticker": "statestreet:ticker",
+    "isin": {
+      "@id": "fibo:ISIN",
+      "@type": "schema:Identifier"
+    },
+    "creationUnit": "statestreet:creationUnit",
+    "portfolioReturn": {
+      "@id": "fibo:timeWeightedReturn",
+      "@type": "schema:Number"
+    },
+    "benchmarkReturn": {
+      "@id": "fibo:benchmarkReturn",
+      "@type": "schema:Number"
+    },
+    "activeReturn": {
+      "@id": "fibo:activeReturn",
+      "@type": "schema:Number"
+    },
+    "trackingError": {
+      "@id": "fibo:trackingError",
+      "@type": "schema:Number"
+    }
+  }
+}

@@ -1,0 +1,550 @@
+openapi: 3.0.3
+info:
+  title: State Street Fund Connect API
+  description: >-
+    The State Street Fund Connect API enables authorized participants (APs), ETF fund managers,
+    and custodians to programmatically manage ETF creation and redemption orders through the
+    Fund Connect platform. Fund Connect is a global online portal for the creation and redemption
+    of ETFs. The API supports automated order entry, basket composition retrieval, order status
+    tracking, and settlement confirmation. In 2025, Fund Connect executed the first API-based
+    ETF order for an Australian-domiciled ETF. The platform processes ETF transactions across
+    all major markets. Authentication uses OAuth 2.0 Client Credentials per RFC 6749 Section 4.4.2.
+  version: 1.0.0
+  contact:
+    name: State Street API Support
+    email: api-support@statestreet.com
+    url: https://developer.statestreet.com
+  termsOfService: https://www.statestreet.com/us/en/individual-investor/tools-and-resources/terms-and-conditions
+  license:
+    name: Proprietary
+    url: https://developer.statestreet.com/api-platform-standards
+servers:
+  - url: https://api.statestreet.com/v1/fund-connect
+    description: State Street Fund Connect API Production
+tags:
+  - name: Orders
+    description: ETF creation and redemption order operations
+  - name: Baskets
+    description: ETF portfolio composition basket operations
+  - name: Funds
+    description: ETF fund information operations
+  - name: Settlement
+    description: Order settlement and confirmation operations
+security:
+  - OAuth2:
+      - fund-connect:orders:read
+      - fund-connect:orders:write
+      - fund-connect:baskets:read
+paths:
+  /funds:
+    get:
+      operationId: listFunds
+      summary: List ETF Funds
+      description: >-
+        Retrieve a list of ETF funds available for creation and redemption through
+        Fund Connect. Returns fund identifiers, names, tickers, base currencies,
+        and authorized participant entitlements.
+      tags:
+        - Funds
+      parameters:
+        - name: market
+          in: query
+          description: Filter by market/exchange
+          required: false
+          schema:
+            type: string
+            example: US
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 25
+            maximum: 100
+        - name: pageToken
+          in: query
+          required: false
+          schema:
+            type: string
+        - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: List of ETF funds
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FundListResponse'
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /funds/{fundId}:
+    get:
+      operationId: getFund
+      summary: Get ETF Fund
+      description: >-
+        Retrieve detailed information for a specific ETF fund including its
+        composition requirements, minimum creation/redemption unit size,
+        and authorized participant eligibility.
+      tags:
+        - Funds
+      parameters:
+        - name: fundId
+          in: path
+          description: Unique fund identifier
+          required: true
+          schema:
+            type: string
+            example: ETF-SPDR-SPY
+        - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: ETF fund details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fund'
+        '404':
+          description: Fund not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /funds/{fundId}/baskets:
+    get:
+      operationId: getFundBasket
+      summary: Get ETF Portfolio Basket
+      description: >-
+        Retrieve the current portfolio composition basket for an ETF fund. Returns
+        the in-kind securities list with required quantities for creation/redemption
+        units, as well as any cash component. Baskets are published daily prior to
+        market open.
+      tags:
+        - Baskets
+      parameters:
+        - name: fundId
+          in: path
+          description: Unique fund identifier
+          required: true
+          schema:
+            type: string
+            example: ETF-SPDR-SPY
+        - name: date
+          in: query
+          description: Date for which to retrieve the basket composition
+          required: false
+          schema:
+            type: string
+            format: date
+            example: '2026-05-02'
+        - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: ETF portfolio basket composition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasketResponse'
+        '404':
+          description: Fund or basket not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /orders:
+    post:
+      operationId: createOrder
+      summary: Create ETF Order
+      description: >-
+        Submit an ETF creation or redemption order through Fund Connect. Authorized
+        participants can request creation of new ETF shares by delivering the in-kind
+        basket, or redeem existing ETF shares to receive the underlying basket securities.
+        Orders are processed at end-of-day NAV.
+      tags:
+        - Orders
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+      responses:
+        '201':
+          description: Order successfully submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Invalid order request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Not authorized as AP for this fund
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    get:
+      operationId: listOrders
+      summary: List ETF Orders
+      description: >-
+        Retrieve a list of ETF creation and redemption orders submitted by the
+        authenticated authorized participant. Supports filtering by order status,
+        fund, and date range.
+      tags:
+        - Orders
+      parameters:
+        - name: fundId
+          in: query
+          description: Filter by fund identifier
+          required: false
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Filter by order status
+          required: false
+          schema:
+            type: string
+            enum:
+              - PENDING
+              - ACCEPTED
+              - PROCESSING
+              - SETTLED
+              - REJECTED
+              - CANCELLED
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 25
+            maximum: 100
+        - name: pageToken
+          in: query
+          required: false
+          schema:
+            type: string
+        - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: List of ETF orders
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderListResponse'
+
+  /orders/{orderId}:
+    get:
+      operationId: getOrder
+      summary: Get ETF Order
+      description: >-
+        Retrieve the current status and details of a specific ETF creation or
+        redemption order including basket delivery confirmation and settlement status.
+      tags:
+        - Orders
+      parameters:
+        - name: orderId
+          in: path
+          description: Unique order identifier
+          required: true
+          schema:
+            type: string
+            example: FC-2026-0502-00123
+        - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: ETF order details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /orders/{orderId}/cancel:
+    post:
+      operationId: cancelOrder
+      summary: Cancel ETF Order
+      description: >-
+        Cancel a pending ETF creation or redemption order before it has been
+        accepted for processing. Orders can only be cancelled while in PENDING status.
+      tags:
+        - Orders
+      parameters:
+        - name: orderId
+          in: path
+          description: Unique order identifier
+          required: true
+          schema:
+            type: string
+            example: FC-2026-0502-00123
+        - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: Order successfully cancelled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Order cannot be cancelled in current state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.statestreet.com/oauth/token
+          scopes:
+            fund-connect:orders:read: Read ETF order history and status
+            fund-connect:orders:write: Submit and cancel ETF orders
+            fund-connect:baskets:read: Read ETF portfolio basket compositions
+
+  parameters:
+    XCorrelationId:
+      name: X-Correlation-ID
+      in: header
+      description: Client-provided correlation ID for request tracing
+      required: false
+      schema:
+        type: string
+        format: uuid
+
+  schemas:
+    FundListResponse:
+      type: object
+      properties:
+        funds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fund'
+        nextPageToken:
+          type: string
+        totalCount:
+          type: integer
+
+    Fund:
+      type: object
+      description: An ETF fund available on Fund Connect
+      properties:
+        fundId:
+          type: string
+          description: Unique fund identifier
+          example: ETF-SPDR-SPY
+        fundName:
+          type: string
+          description: Full fund name
+          example: SPDR S&P 500 ETF Trust
+        ticker:
+          type: string
+          description: Exchange ticker symbol
+          example: SPY
+        isin:
+          type: string
+          description: ISIN code
+          example: US78462F1030
+        baseCurrency:
+          type: string
+          description: Fund base currency
+          example: USD
+        exchange:
+          type: string
+          description: Primary exchange
+          example: NYSE Arca
+        creationUnit:
+          type: integer
+          description: Number of shares per creation/redemption unit
+          example: 50000
+        fundManager:
+          type: string
+          description: Fund manager/sponsor name
+          example: State Street Global Advisors
+        custodian:
+          type: string
+          description: Fund custodian
+          example: State Street Bank
+
+    BasketResponse:
+      type: object
+      description: ETF portfolio basket composition
+      properties:
+        fundId:
+          type: string
+          example: ETF-SPDR-SPY
+        date:
+          type: string
+          format: date
+        cashComponent:
+          type: number
+          format: double
+          description: Cash component per creation unit in base currency
+          example: 1250.50
+        securities:
+          type: array
+          description: In-kind securities required per creation/redemption unit
+          items:
+            type: object
+            properties:
+              securityId:
+                type: string
+                example: US0378331005
+              securityIdType:
+                type: string
+                example: ISIN
+              securityName:
+                type: string
+                example: Apple Inc
+              ticker:
+                type: string
+                example: AAPL
+              quantity:
+                type: number
+                format: double
+                description: Shares per creation unit
+                example: 1250
+
+    OrderRequest:
+      type: object
+      required:
+        - fundId
+        - orderType
+        - units
+      description: ETF creation or redemption order request
+      properties:
+        fundId:
+          type: string
+          description: Fund identifier
+          example: ETF-SPDR-SPY
+        orderType:
+          type: string
+          description: Order type
+          enum:
+            - CREATION
+            - REDEMPTION
+          example: CREATION
+        units:
+          type: integer
+          description: Number of creation/redemption units
+          minimum: 1
+          example: 5
+        settlementType:
+          type: string
+          description: Settlement instruction type
+          enum:
+            - IN_KIND
+            - CASH
+          default: IN_KIND
+        clientOrderId:
+          type: string
+          description: Client-provided reference ID
+          example: CLIENT-ORDER-98765
+
+    OrderListResponse:
+      type: object
+      properties:
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+        nextPageToken:
+          type: string
+        totalCount:
+          type: integer
+
+    Order:
+      type: object
+      description: An ETF creation or redemption order
+      properties:
+        orderId:
+          type: string
+          description: Unique Fund Connect order identifier
+          example: FC-2026-0502-00123
+        clientOrderId:
+          type: string
+          description: Client-provided reference ID
+          example: CLIENT-ORDER-98765
+        fundId:
+          type: string
+          example: ETF-SPDR-SPY
+        orderType:
+          type: string
+          enum:
+            - CREATION
+            - REDEMPTION
+          example: CREATION
+        units:
+          type: integer
+          description: Number of creation/redemption units ordered
+          example: 5
+        status:
+          type: string
+          enum:
+            - PENDING
+            - ACCEPTED
+            - PROCESSING
+            - SETTLED
+            - REJECTED
+            - CANCELLED
+          example: ACCEPTED
+        submittedAt:
+          type: string
+          format: date-time
+          description: Order submission timestamp
+        tradeDate:
+          type: string
+          format: date
+          description: Trade date
+        settlementDate:
+          type: string
+          format: date
+          description: Expected settlement date
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: UNAUTHORIZED
+        message:
+          type: string
+          example: Access token is missing or invalid.
+        correlationId:
+          type: string
+          format: uuid

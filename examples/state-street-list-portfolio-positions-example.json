@@ -1,0 +1,65 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.statestreet.com/v1/portfolios/PORT-12345/positions",
+    "headers": {
+      "Authorization": "Bearer {access_token}",
+      "X-Correlation-ID": "550e8400-e29b-41d4-a716-446655440000"
+    },
+    "parameters": {
+      "asOfDate": "2026-05-01",
+      "assetClass": "EQUITY",
+      "pageSize": 10
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "portfolioId": "PORT-12345",
+      "asOfDate": "2026-05-01",
+      "totalCount": 87,
+      "nextPageToken": "eyJwYWdlIjoyLCJzaXplIjoxMH0=",
+      "positions": [
+        {
+          "securityId": "US0378331005",
+          "securityIdType": "ISIN",
+          "securityName": "Apple Inc",
+          "assetClass": "EQUITY",
+          "quantity": 15000,
+          "marketValue": 3225000.00,
+          "price": 215.00,
+          "currency": "USD",
+          "costBasis": 2700000.00,
+          "unrealizedGainLoss": 525000.00,
+          "weight": 0.0258
+        },
+        {
+          "securityId": "US5949181045",
+          "securityIdType": "ISIN",
+          "securityName": "Microsoft Corporation",
+          "assetClass": "EQUITY",
+          "quantity": 8500,
+          "marketValue": 3561000.00,
+          "price": 419.00,
+          "currency": "USD",
+          "costBasis": 2975000.00,
+          "unrealizedGainLoss": 586000.00,
+          "weight": 0.0285
+        },
+        {
+          "securityId": "US02079K3059",
+          "securityIdType": "ISIN",
+          "securityName": "Alphabet Inc Class A",
+          "assetClass": "EQUITY",
+          "quantity": 12200,
+          "marketValue": 2196000.00,
+          "price": 180.00,
+          "currency": "USD",
+          "costBasis": 1830000.00,
+          "unrealizedGainLoss": 366000.00,
+          "weight": 0.0176
+        }
+      ]
+    }
+  }
+}

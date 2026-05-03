@@ -1,0 +1,361 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "State Street Portfolio Management"
+  description: >-
+    Workflow capability combining State Street Alpha Data Platform and Fund Connect APIs
+    for institutional investment portfolio management. Enables portfolio managers, analysts,
+    and risk officers to access portfolio positions, transaction history, performance
+    measurement, risk analytics, and ETF order management through a unified interface.
+    Designed for asset managers, pension funds, insurance companies, and endowments
+    using the State Street Alpha platform.
+  tags:
+    - Financial Services
+    - Investment Management
+    - Portfolio
+    - Institutional
+    - ETF
+    - Risk Analytics
+  created: "2026-05-02"
+  modified: "2026-05-02"
+
+binds:
+  - namespace: env
+    keys:
+      STATE_STREET_CLIENT_ID: STATE_STREET_CLIENT_ID
+      STATE_STREET_CLIENT_SECRET: STATE_STREET_CLIENT_SECRET
+
+capability:
+  consumes:
+    - import: state-street-alpha
+      location: ./shared/alpha-data-platform.yaml
+    - import: state-street-fund-connect
+      location: ./shared/fund-connect.yaml
+
+  exposes:
+    - type: rest
+      port: 8080
+      namespace: state-street-portfolio-management-api
+      description: "Unified REST API for State Street institutional portfolio management workflows."
+      resources:
+        - path: /v1/portfolios
+          name: portfolios
+          description: "Portfolio listing and management"
+          operations:
+            - method: GET
+              name: list-portfolios
+              description: "List all accessible institutional portfolios"
+              call: "state-street-alpha.list-portfolios"
+              with:
+                portfolioType: "rest.portfolioType"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/portfolios/{portfolioId}
+          name: portfolio-detail
+          description: "Portfolio detail"
+          operations:
+            - method: GET
+              name: get-portfolio
+              description: "Get portfolio details"
+              call: "state-street-alpha.get-portfolio"
+              with:
+                portfolioId: "rest.portfolioId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/portfolios/{portfolioId}/positions
+          name: positions
+          description: "Portfolio positions and holdings"
+          operations:
+            - method: GET
+              name: list-positions
+              description: "Get current portfolio positions"
+              call: "state-street-alpha.list-portfolio-positions"
+              with:
+                portfolioId: "rest.portfolioId"
+                asOfDate: "rest.asOfDate"
+                assetClass: "rest.assetClass"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/portfolios/{portfolioId}/transactions
+          name: transactions
+          description: "Portfolio transaction history"
+          operations:
+            - method: GET
+              name: list-transactions
+              description: "Get portfolio transaction history"
+              call: "state-street-alpha.list-portfolio-transactions"
+              with:
+                portfolioId: "rest.portfolioId"
+                startDate: "rest.startDate"
+                endDate: "rest.endDate"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/portfolios/{portfolioId}/performance
+          name: performance
+          description: "Portfolio performance measurement"
+          operations:
+            - method: GET
+              name: get-performance
+              description: "Get portfolio performance and attribution"
+              call: "state-street-alpha.get-portfolio-performance"
+              with:
+                portfolioId: "rest.portfolioId"
+                startDate: "rest.startDate"
+                endDate: "rest.endDate"
+                frequency: "rest.frequency"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/portfolios/{portfolioId}/risk
+          name: risk
+          description: "Portfolio risk analytics"
+          operations:
+            - method: GET
+              name: get-risk
+              description: "Get portfolio risk analytics"
+              call: "state-street-alpha.get-portfolio-risk"
+              with:
+                portfolioId: "rest.portfolioId"
+                asOfDate: "rest.asOfDate"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/etf/funds
+          name: etf-funds
+          description: "ETF fund information"
+          operations:
+            - method: GET
+              name: list-etf-funds
+              description: "List ETF funds on Fund Connect"
+              call: "state-street-fund-connect.list-funds"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/etf/funds/{fundId}/baskets
+          name: etf-baskets
+          description: "ETF portfolio baskets"
+          operations:
+            - method: GET
+              name: get-etf-basket
+              description: "Get ETF portfolio composition basket"
+              call: "state-street-fund-connect.get-fund-basket"
+              with:
+                fundId: "rest.fundId"
+                date: "rest.date"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/etf/orders
+          name: etf-orders
+          description: "ETF creation and redemption orders"
+          operations:
+            - method: GET
+              name: list-etf-orders
+              description: "List ETF orders"
+              call: "state-street-fund-connect.list-orders"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: submit-etf-order
+              description: "Submit ETF creation or redemption order"
+              call: "state-street-fund-connect.create-order"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9090
+      namespace: state-street-portfolio-management-mcp
+      transport: http
+      description: "MCP server for AI-assisted State Street institutional investment portfolio management."
+      tools:
+        - name: list-portfolios
+          description: >-
+            List all institutional investment portfolios accessible via State Street Alpha.
+            Returns portfolio names, types, base currencies, and current market values.
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "state-street-alpha.list-portfolios"
+          with:
+            portfolioType: "tools.portfolioType"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-portfolio
+          description: >-
+            Get comprehensive details for a specific State Street Alpha portfolio
+            including total market value, benchmark, and custodian information.
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "state-street-alpha.get-portfolio"
+          with:
+            portfolioId: "tools.portfolioId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-portfolio-positions
+          description: >-
+            List current positions in a portfolio as of a given date. Returns
+            securities, quantities, market values, cost basis, and unrealized P&L.
+            Filter by asset class (EQUITY, FIXED_INCOME, CASH, DERIVATIVES, etc.).
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "state-street-alpha.list-portfolio-positions"
+          with:
+            portfolioId: "tools.portfolioId"
+            asOfDate: "tools.asOfDate"
+            assetClass: "tools.assetClass"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-portfolio-transactions
+          description: >-
+            List transaction history for a portfolio including trades, corporate actions,
+            cash movements, and income events over a specified date range.
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "state-street-alpha.list-portfolio-transactions"
+          with:
+            portfolioId: "tools.portfolioId"
+            startDate: "tools.startDate"
+            endDate: "tools.endDate"
+            transactionType: "tools.transactionType"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-portfolio-performance
+          description: >-
+            Get performance measurement data for a portfolio including time-weighted returns,
+            benchmark returns, and active returns over a specified period.
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "state-street-alpha.get-portfolio-performance"
+          with:
+            portfolioId: "tools.portfolioId"
+            startDate: "tools.startDate"
+            endDate: "tools.endDate"
+            frequency: "tools.frequency"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-portfolio-risk
+          description: >-
+            Get risk analytics for a portfolio including Value at Risk (VaR),
+            tracking error, beta, duration, and factor exposures.
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "state-street-alpha.get-portfolio-risk"
+          with:
+            portfolioId: "tools.portfolioId"
+            asOfDate: "tools.asOfDate"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-etf-funds
+          description: >-
+            List ETF funds available for creation and redemption on State Street Fund Connect.
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "state-street-fund-connect.list-funds"
+          with:
+            market: "tools.market"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-etf-basket
+          description: >-
+            Get the current portfolio composition basket for an ETF fund showing
+            the in-kind securities and quantities required per creation unit.
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "state-street-fund-connect.get-fund-basket"
+          with:
+            fundId: "tools.fundId"
+            date: "tools.date"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: submit-etf-order
+          description: >-
+            Submit an ETF creation or redemption order through State Street Fund Connect.
+            Specify the fund, order type (CREATION or REDEMPTION), and number of units.
+          hints:
+            readOnly: false
+            openWorld: false
+          call: "state-street-fund-connect.create-order"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-etf-orders
+          description: >-
+            List ETF creation and redemption orders submitted through Fund Connect,
+            filterable by fund, status, and date range.
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "state-street-fund-connect.list-orders"
+          with:
+            fundId: "tools.fundId"
+            status: "tools.status"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-etf-order-status
+          description: >-
+            Get the current status of a specific ETF creation or redemption order
+            on State Street Fund Connect.
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "state-street-fund-connect.get-order"
+          with:
+            orderId: "tools.orderId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: cancel-etf-order
+          description: >-
+            Cancel a pending ETF creation or redemption order on State Street Fund Connect.
+            Only available for orders in PENDING status.
+          hints:
+            readOnly: false
+            destructive: true
+            idempotent: true
+          call: "state-street-fund-connect.cancel-order"
+          with:
+            orderId: "tools.orderId"
+          outputParameters:
+            - type: object
+              mapping: "$."

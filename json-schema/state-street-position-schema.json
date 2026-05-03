@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/state-street/main/json-schema/state-street-position-schema.json",
+  "title": "Position",
+  "description": "Schema for a State Street Alpha portfolio position",
+  "type": "object",
+  "properties": {
+    "securityId": {
+      "type": "string",
+      "description": "Unique security identifier"
+    },
+    "securityIdType": {
+      "type": "string",
+      "description": "Security identifier type",
+      "enum": ["ISIN", "CUSIP", "SEDOL", "TICKER"]
+    },
+    "securityName": {
+      "type": "string",
+      "description": "Security name"
+    },
+    "assetClass": {
+      "type": "string",
+      "description": "Asset class classification",
+      "enum": ["EQUITY", "FIXED_INCOME", "CASH", "DERIVATIVES", "ALTERNATIVES", "REAL_ESTATE"]
+    },
+    "quantity": {
+      "type": "number",
+      "description": "Number of shares or units held"
+    },
+    "marketValue": {
+      "type": "number",
+      "description": "Current market value in base currency"
+    },
+    "price": {
+      "type": "number",
+      "description": "Current price per unit",
+      "minimum": 0
+    },
+    "currency": {
+      "type": "string",
+      "description": "Security local currency",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "costBasis": {
+      "type": "number",
+      "description": "Total cost basis"
+    },
+    "unrealizedGainLoss": {
+      "type": "number",
+      "description": "Unrealized gain or loss (can be negative)"
+    },
+    "weight": {
+      "type": "number",
+      "description": "Portfolio weight as a decimal",
+      "minimum": 0,
+      "maximum": 1
+    }
+  },
+  "required": ["securityId", "securityIdType", "securityName", "assetClass", "quantity", "marketValue"]
+}

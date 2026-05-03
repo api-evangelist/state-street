@@ -1,0 +1,49 @@
+{
+  "name": "Portfolio",
+  "description": "State Street Alpha institutional investment portfolio structure",
+  "properties": [
+    { "name": "portfolioId", "type": "string", "description": "Unique portfolio identifier" },
+    { "name": "portfolioName", "type": "string", "description": "Portfolio name" },
+    { "name": "portfolioType", "type": "string", "description": "Portfolio type (MUTUAL_FUND, PENSION, etc.)" },
+    { "name": "baseCurrency", "type": "string", "description": "ISO 4217 base currency" },
+    { "name": "inceptionDate", "type": "date", "description": "Portfolio inception date" },
+    { "name": "totalMarketValue", "type": "number", "description": "Total market value in base currency" },
+    { "name": "benchmarkId", "type": "string", "description": "Assigned benchmark identifier" },
+    { "name": "custodian", "type": "string", "description": "Asset custodian name" }
+  ],
+  "related": [
+    {
+      "name": "Position",
+      "description": "Individual portfolio position",
+      "properties": [
+        { "name": "securityId", "type": "string", "description": "Security identifier" },
+        { "name": "securityIdType", "type": "string", "description": "ISIN, CUSIP, SEDOL, or TICKER" },
+        { "name": "securityName", "type": "string", "description": "Security name" },
+        { "name": "assetClass", "type": "string", "description": "Asset class classification" },
+        { "name": "quantity", "type": "number", "description": "Units held" },
+        { "name": "marketValue", "type": "number", "description": "Current market value" },
+        { "name": "price", "type": "number", "description": "Price per unit" },
+        { "name": "currency", "type": "string", "description": "Local currency" },
+        { "name": "costBasis", "type": "number", "description": "Total cost basis" },
+        { "name": "unrealizedGainLoss", "type": "number", "description": "Unrealized P&L" },
+        { "name": "weight", "type": "number", "description": "Portfolio weight" }
+      ]
+    },
+    {
+      "name": "Transaction",
+      "description": "Portfolio transaction record",
+      "properties": [
+        { "name": "transactionId", "type": "string", "description": "Transaction identifier" },
+        { "name": "transactionType", "type": "string", "description": "TRADE, CORPORATE_ACTION, CASH, etc." },
+        { "name": "tradeDate", "type": "date", "description": "Trade execution date" },
+        { "name": "settlementDate", "type": "date", "description": "Settlement date" },
+        { "name": "settlementStatus", "type": "string", "description": "PENDING, SETTLED, FAILED" },
+        { "name": "securityId", "type": "string", "description": "Security identifier" },
+        { "name": "quantity", "type": "number", "description": "Trade quantity" },
+        { "name": "price", "type": "number", "description": "Trade price" },
+        { "name": "netAmount", "type": "number", "description": "Net transaction amount" },
+        { "name": "currency", "type": "string", "description": "Transaction currency" }
+      ]
+    }
+  ]
+}

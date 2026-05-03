@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/state-street/main/json-schema/state-street-portfolio-schema.json",
+  "title": "Portfolio",
+  "description": "Schema for a State Street Alpha institutional investment portfolio",
+  "type": "object",
+  "properties": {
+    "portfolioId": {
+      "type": "string",
+      "description": "Unique portfolio identifier",
+      "examples": ["PORT-12345"]
+    },
+    "portfolioName": {
+      "type": "string",
+      "description": "Human-readable portfolio name"
+    },
+    "portfolioType": {
+      "type": "string",
+      "description": "Type of investment portfolio",
+      "enum": ["MUTUAL_FUND", "PENSION", "INSURANCE", "ENDOWMENT", "ALTERNATIVES", "ETF", "SEPARATE_ACCOUNT"]
+    },
+    "baseCurrency": {
+      "type": "string",
+      "description": "ISO 4217 currency code for the portfolio base currency",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "inceptionDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Portfolio inception date"
+    },
+    "totalMarketValue": {
+      "type": "number",
+      "description": "Current total market value in base currency",
+      "minimum": 0
+    },
+    "benchmarkId": {
+      "type": "string",
+      "description": "Benchmark identifier assigned to the portfolio"
+    },
+    "custodian": {
+      "type": "string",
+      "description": "Custodian holding the assets"
+    }
+  },
+  "required": ["portfolioId", "portfolioName", "baseCurrency"]
+}

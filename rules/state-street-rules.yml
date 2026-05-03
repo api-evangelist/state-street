@@ -1,0 +1,176 @@
+extends:
+  - spectral:oas
+
+rules:
+
+  state-street-info-contact-required:
+    description: All State Street APIs must include contact information
+    message: API info must include contact email and URL
+    severity: error
+    given: $.info
+    then:
+      - field: contact.email
+        function: truthy
+      - field: contact.url
+        function: truthy
+
+  state-street-operation-summary-title-case:
+    description: Operation summaries must use Title Case per State Street API standards
+    message: Operation summary must use Title Case
+    severity: error
+    given: $.paths[*][get,post,put,patch,delete].summary
+    then:
+      function: pattern
+      functionOptions:
+        match: '^[A-Z][a-zA-Z0-9]*(?: [A-Z][a-zA-Z0-9]*)*$'
+
+  state-street-operation-id-camel-case:
+    description: Operation IDs must use camelCase
+    message: OperationId must be camelCase
+    severity: error
+    given: $.paths[*][get,post,put,patch,delete].operationId
+    then:
+      function: pattern
+      functionOptions:
+        match: '^[a-z][a-zA-Z0-9]*$'
+
+  state-street-operation-tags-required:
+    description: All operations must be tagged
+    message: Operation must include at least one tag
+    severity: error
+    given: $.paths[*][get,post,put,patch,delete]
+    then:
+      field: tags
+      function: truthy
+
+  state-street-path-versioned:
+    description: All paths must start with a version prefix
+    message: Paths must begin with /v1/ or similar version prefix
+    severity: error
+    given: $.paths
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        match: '^/v[0-9]+/'
+
+  state-street-oauth2-required:
+    description: State Street APIs must use OAuth2 Client Credentials
+    message: API must define OAuth2 security scheme
+    severity: error
+    given: $.components.securitySchemes[*]
+    then:
+      field: type
+      function: pattern
+      functionOptions:
+        match: '^oauth2$'
+
+  state-street-oauth2-client-credentials:
+    description: OAuth2 must use Client Credentials flow per RFC 6749 Section 4.4.2
+    message: OAuth2 scheme must include clientCredentials flow
+    severity: error
+    given: $.components.securitySchemes[*][?(@.type=='oauth2')].flows
+    then:
+      field: clientCredentials
+      function: truthy
+
+  state-street-correlation-id-header:
+    description: APIs should support X-Correlation-ID header for request tracing
+    message: API should define X-Correlation-ID parameter for tracing
+    severity: warn
+    given: $.components.parameters
+    then:
+      field: XCorrelationId
+      function: truthy
+
+  state-street-pagination-get-lists:
+    description: List operations must support pagination
+    message: GET list operations should support pageSize and pageToken parameters
+    severity: warn
+    given: $.paths[*].get.parameters
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            properties:
+              name:
+                enum:
+                  - pageSize
+                  - pageToken
+
+  state-street-response-429-rate-limit:
+    description: APIs must document rate limiting responses
+    message: Operations should define 429 Too Many Requests with Retry-After header
+    severity: warn
+    given: $.paths[*][get,post,put,patch,delete].responses
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          anyOf:
+            - required:
+                - '429'
+            - required:
+                - '200'
+
+  state-street-json-default-format:
+    description: API must use application/json as the primary content type
+    message: Operations must support application/json content type
+    severity: error
+    given: $.paths[*][get,post,put,patch,delete].responses['200'].content
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required:
+            - application/json
+
+  state-street-schema-description:
+    description: All schema components must have descriptions
+    message: Schema component must include a description
+    severity: warn
+    given: $.components.schemas[*]
+    then:
+      field: description
+      function: truthy
+
+  state-street-error-schema-consistent:
+    description: Error responses should reference the standard Error schema
+    message: Error responses should reference the reusable Error schema component
+    severity: warn
+    given: $.paths[*][get,post,put,patch,delete].responses[4*,5*].content['application/json']
+    then:
+      field: schema
+      function: truthy
+
+  state-street-security-global:
+    description: API must apply security globally
+    message: API must define global security requirement
+    severity: error
+    given: $
+    then:
+      field: security
+      function: truthy
+
+  state-street-servers-defined:
+    description: API must define servers
+    message: API must specify at least one server URL
+    severity: error
+    given: $
+    then:
+      field: servers
+      function: truthy
+
+  state-street-parameter-description:
+    description: All parameters must have descriptions
+    message: Parameter must include a description
+    severity: warn
+    given: $.paths[*][get,post,put,patch,delete].parameters[*]
+    then:
+      field: description
+      function: truthy

@@ -1,0 +1,754 @@
+openapi: 3.0.3
+info:
+  title: State Street Alpha Data Platform API
+  description: >-
+    The State Street Alpha Data Platform API provides institutional investment managers,
+    asset owners, and wealth managers with programmatic access to their portfolio data
+    across the front-to-back Alpha investment management platform. The API enables clients
+    to retrieve portfolio positions, holdings, investable cash, pledged collateral, securities
+    on loan, risk exposures, performance measurement, and transaction history in near real-time.
+    Built on Snowflake and Microsoft Azure, the Alpha Data Platform provides intraday visibility
+    across geographies, asset classes, and counterparties. Authentication uses OAuth 2.0
+    Client Credentials (RFC 6749 Section 4.4.2). All requests require the X-Correlation-ID
+    header for request tracing. The API follows REST conventions with JSON as the default
+    data format, versioned using Major.Minor.Patch semantics.
+  version: 1.0.0
+  contact:
+    name: State Street API Support
+    email: api-support@statestreet.com
+    url: https://developer.statestreet.com
+  termsOfService: https://www.statestreet.com/us/en/individual-investor/tools-and-resources/terms-and-conditions
+  license:
+    name: Proprietary
+    url: https://developer.statestreet.com/api-platform-standards
+servers:
+  - url: https://api.statestreet.com/v1
+    description: State Street API Production
+tags:
+  - name: Portfolios
+    description: Portfolio and account management operations
+  - name: Positions
+    description: Portfolio position and holdings operations
+  - name: Transactions
+    description: Transaction history and settlement operations
+  - name: Performance
+    description: Performance measurement and attribution operations
+  - name: Risk
+    description: Risk analytics and exposure operations
+security:
+  - OAuth2:
+      - portfolio:read
+      - positions:read
+      - transactions:read
+      - performance:read
+      - risk:read
+paths:
+  /portfolios:
+    get:
+      operationId: listPortfolios
+      summary: List Portfolios
+      description: >-
+        Retrieve a list of portfolios accessible to the authenticated client application.
+        Returns portfolio identifiers, names, types, base currencies, and inception dates.
+        Supports pagination for large portfolio sets.
+      tags:
+        - Portfolios
+      parameters:
+        - name: pageSize
+          in: query
+          description: Number of portfolios per page (max 100)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 25
+        - name: pageToken
+          in: query
+          description: Pagination token from previous response
+          required: false
+          schema:
+            type: string
+        - name: portfolioType
+          in: query
+          description: Filter by portfolio type
+          required: false
+          schema:
+            type: string
+            enum:
+              - MUTUAL_FUND
+              - PENSION
+              - INSURANCE
+              - ENDOWMENT
+              - ALTERNATIVES
+              - ETF
+              - SEPARATE_ACCOUNT
+        - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: List of portfolios
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortfolioListResponse'
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient scope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Rate limit exceeded
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+              description: Seconds to wait before retrying
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /portfolios/{portfolioId}:
+    get:
+      operationId: getPortfolio
+      summary: Get Portfolio
+      description: >-
+        Retrieve detailed information for a specific portfolio including its current
+        market value, base currency, inception date, benchmark assignment, and
+        portfolio manager details.
+      tags:
+        - Portfolios
+      parameters:
+        - name: portfolioId
+          in: path
+          description: Unique portfolio identifier
+          required: true
+          schema:
+            type: string
+            example: PORT-12345
+        - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: Portfolio details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+        '404':
+          description: Portfolio not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /portfolios/{portfolioId}/positions:
+    get:
+      operationId: listPortfolioPositions
+      summary: List Portfolio Positions
+      description: >-
+        Retrieve current positions for a portfolio as of the specified date or in
+        near real-time intraday. Returns security identifiers, quantities, market values,
+        cost basis, unrealized gain/loss, and accrued income for each position.
+      tags:
+        - Positions
+      parameters:
+        - name: portfolioId
+          in: path
+          description: Unique portfolio identifier
+          required: true
+          schema:
+            type: string
+            example: PORT-12345
+        - name: asOfDate
+          in: query
+          description: As-of date for positions (defaults to latest available)
+          required: false
+          schema:
+            type: string
+            format: date
+            example: '2026-05-01'
+        - name: assetClass
+          in: query
+          description: Filter by asset class
+          required: false
+          schema:
+            type: string
+            enum:
+              - EQUITY
+              - FIXED_INCOME
+              - CASH
+              - DERIVATIVES
+              - ALTERNATIVES
+              - REAL_ESTATE
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: pageToken
+          in: query
+          required: false
+          schema:
+            type: string
+        - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: Portfolio positions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PositionListResponse'
+        '404':
+          description: Portfolio not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /portfolios/{portfolioId}/transactions:
+    get:
+      operationId: listPortfolioTransactions
+      summary: List Portfolio Transactions
+      description: >-
+        Retrieve transaction history for a portfolio over a specified date range.
+        Returns trade details, corporate actions, cash movements, income events,
+        and settlement status. Supports filtering by transaction type and date range.
+      tags:
+        - Transactions
+      parameters:
+        - name: portfolioId
+          in: path
+          description: Unique portfolio identifier
+          required: true
+          schema:
+            type: string
+            example: PORT-12345
+        - name: startDate
+          in: query
+          description: Start date for transaction history
+          required: true
+          schema:
+            type: string
+            format: date
+            example: '2026-04-01'
+        - name: endDate
+          in: query
+          description: End date for transaction history
+          required: true
+          schema:
+            type: string
+            format: date
+            example: '2026-04-30'
+        - name: transactionType
+          in: query
+          description: Filter by transaction type
+          required: false
+          schema:
+            type: string
+            enum:
+              - TRADE
+              - CORPORATE_ACTION
+              - CASH
+              - INCOME
+              - TRANSFER
+              - FEE
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: pageToken
+          in: query
+          required: false
+          schema:
+            type: string
+        - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: Portfolio transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionListResponse'
+        '404':
+          description: Portfolio not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /portfolios/{portfolioId}/performance:
+    get:
+      operationId: getPortfolioPerformance
+      summary: Get Portfolio Performance
+      description: >-
+        Retrieve performance measurement and attribution data for a portfolio over a
+        specified period. Returns time-weighted returns, money-weighted returns, and
+        benchmark-relative performance. Supports daily and monthly calculation frequencies
+        using industry-standard methodologies for all asset types.
+      tags:
+        - Performance
+      parameters:
+        - name: portfolioId
+          in: path
+          description: Unique portfolio identifier
+          required: true
+          schema:
+            type: string
+            example: PORT-12345
+        - name: startDate
+          in: query
+          description: Performance measurement start date
+          required: true
+          schema:
+            type: string
+            format: date
+            example: '2026-01-01'
+        - name: endDate
+          in: query
+          description: Performance measurement end date
+          required: true
+          schema:
+            type: string
+            format: date
+            example: '2026-04-30'
+        - name: frequency
+          in: query
+          description: Performance calculation frequency
+          required: false
+          schema:
+            type: string
+            enum:
+              - DAILY
+              - MONTHLY
+              - QUARTERLY
+              - ANNUAL
+            default: MONTHLY
+        - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: Portfolio performance data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerformanceResponse'
+        '404':
+          description: Portfolio not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /portfolios/{portfolioId}/risk:
+    get:
+      operationId: getPortfolioRisk
+      summary: Get Portfolio Risk Analytics
+      description: >-
+        Retrieve risk analytics for a portfolio including value at risk (VaR), tracking
+        error, beta, duration, convexity, and factor exposures. The TrueView risk analytics
+        engine provides scenario analysis and stress testing capabilities for regulatory
+        reporting and investment decision-making.
+      tags:
+        - Risk
+      parameters:
+        - name: portfolioId
+          in: path
+          description: Unique portfolio identifier
+          required: true
+          schema:
+            type: string
+            example: PORT-12345
+        - name: asOfDate
+          in: query
+          description: As-of date for risk calculation
+          required: false
+          schema:
+            type: string
+            format: date
+            example: '2026-05-01'
+        - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: Portfolio risk analytics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiskResponse'
+        '404':
+          description: Portfolio not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: >-
+        OAuth 2.0 Client Credentials flow per RFC 6749 Section 4.4.2.
+        Requires multifactor authentication for all user access.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.statestreet.com/oauth/token
+          scopes:
+            portfolio:read: Read portfolio metadata and account information
+            positions:read: Read portfolio positions and holdings
+            transactions:read: Read transaction history
+            performance:read: Read performance measurement and attribution data
+            risk:read: Read risk analytics and exposure data
+
+  parameters:
+    XCorrelationId:
+      name: X-Correlation-ID
+      in: header
+      description: Client-provided correlation ID for request tracing
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: 550e8400-e29b-41d4-a716-446655440000
+
+  schemas:
+    PortfolioListResponse:
+      type: object
+      description: Paginated list of portfolios
+      properties:
+        portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Portfolio'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results
+        totalCount:
+          type: integer
+          description: Total number of portfolios accessible
+
+    Portfolio:
+      type: object
+      description: A State Street Alpha portfolio
+      properties:
+        portfolioId:
+          type: string
+          description: Unique portfolio identifier
+          example: PORT-12345
+        portfolioName:
+          type: string
+          description: Human-readable portfolio name
+          example: US Large Cap Core Equity
+        portfolioType:
+          type: string
+          description: Type of portfolio
+          example: MUTUAL_FUND
+        baseCurrency:
+          type: string
+          description: ISO 4217 currency code for the portfolio base currency
+          example: USD
+        inceptionDate:
+          type: string
+          format: date
+          description: Portfolio inception date
+          example: '2010-01-15'
+        totalMarketValue:
+          type: number
+          format: double
+          description: Current total market value in base currency
+          example: 1250000000.00
+        benchmarkId:
+          type: string
+          description: Benchmark identifier assigned to the portfolio
+          example: SP500
+        custodian:
+          type: string
+          description: Custodian holding the assets
+          example: State Street Bank
+
+    PositionListResponse:
+      type: object
+      description: Paginated list of portfolio positions
+      properties:
+        portfolioId:
+          type: string
+          example: PORT-12345
+        asOfDate:
+          type: string
+          format: date
+          description: As-of date for the positions
+        positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Position'
+        nextPageToken:
+          type: string
+        totalCount:
+          type: integer
+
+    Position:
+      type: object
+      description: A single portfolio position
+      properties:
+        securityId:
+          type: string
+          description: Unique security identifier
+          example: US0378331005
+        securityIdType:
+          type: string
+          description: Security identifier type
+          enum:
+            - ISIN
+            - CUSIP
+            - SEDOL
+            - TICKER
+          example: ISIN
+        securityName:
+          type: string
+          description: Security name
+          example: Apple Inc
+        assetClass:
+          type: string
+          description: Asset class classification
+          example: EQUITY
+        quantity:
+          type: number
+          format: double
+          description: Number of shares or units held
+          example: 15000
+        marketValue:
+          type: number
+          format: double
+          description: Current market value in base currency
+          example: 3225000.00
+        price:
+          type: number
+          format: double
+          description: Current price per unit
+          example: 215.00
+        currency:
+          type: string
+          description: Security local currency
+          example: USD
+        costBasis:
+          type: number
+          format: double
+          description: Total cost basis
+          example: 2700000.00
+        unrealizedGainLoss:
+          type: number
+          format: double
+          description: Unrealized gain or loss
+          example: 525000.00
+        weight:
+          type: number
+          format: double
+          description: Portfolio weight as a decimal
+          example: 0.0258
+
+    TransactionListResponse:
+      type: object
+      description: Paginated list of transactions
+      properties:
+        portfolioId:
+          type: string
+          example: PORT-12345
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        nextPageToken:
+          type: string
+        totalCount:
+          type: integer
+
+    Transaction:
+      type: object
+      description: A portfolio transaction
+      properties:
+        transactionId:
+          type: string
+          description: Unique transaction identifier
+          example: TXN-20260415-78901
+        transactionType:
+          type: string
+          description: Transaction type
+          example: TRADE
+        tradeDate:
+          type: string
+          format: date
+          description: Trade execution date
+          example: '2026-04-15'
+        settlementDate:
+          type: string
+          format: date
+          description: Expected or actual settlement date
+          example: '2026-04-17'
+        settlementStatus:
+          type: string
+          description: Settlement status
+          enum:
+            - PENDING
+            - SETTLED
+            - FAILED
+          example: SETTLED
+        securityId:
+          type: string
+          description: Security identifier
+          example: US0378331005
+        securityName:
+          type: string
+          description: Security name
+          example: Apple Inc
+        quantity:
+          type: number
+          format: double
+          description: Transaction quantity (positive for buy, negative for sell)
+          example: 500
+        price:
+          type: number
+          format: double
+          description: Transaction price per unit
+          example: 213.50
+        netAmount:
+          type: number
+          format: double
+          description: Net transaction amount after commissions and fees
+          example: 106750.00
+        currency:
+          type: string
+          description: Transaction currency
+          example: USD
+
+    PerformanceResponse:
+      type: object
+      description: Portfolio performance measurement data
+      properties:
+        portfolioId:
+          type: string
+          example: PORT-12345
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        frequency:
+          type: string
+          example: MONTHLY
+        portfolioReturn:
+          type: number
+          format: double
+          description: Portfolio time-weighted return for the period (decimal)
+          example: 0.0743
+        benchmarkReturn:
+          type: number
+          format: double
+          description: Benchmark return for the period (decimal)
+          example: 0.0681
+        activeReturn:
+          type: number
+          format: double
+          description: Active return vs benchmark (decimal)
+          example: 0.0062
+        periods:
+          type: array
+          description: Performance data by period
+          items:
+            type: object
+            properties:
+              periodStart:
+                type: string
+                format: date
+              periodEnd:
+                type: string
+                format: date
+              portfolioReturn:
+                type: number
+                format: double
+              benchmarkReturn:
+                type: number
+                format: double
+
+    RiskResponse:
+      type: object
+      description: Portfolio risk analytics
+      properties:
+        portfolioId:
+          type: string
+          example: PORT-12345
+        asOfDate:
+          type: string
+          format: date
+        valueAtRisk95:
+          type: number
+          format: double
+          description: 95% confidence level 1-day Value at Risk (decimal)
+          example: 0.0142
+        valueAtRisk99:
+          type: number
+          format: double
+          description: 99% confidence level 1-day Value at Risk (decimal)
+          example: 0.0218
+        trackingError:
+          type: number
+          format: double
+          description: Annualized tracking error vs benchmark (decimal)
+          example: 0.0315
+        beta:
+          type: number
+          format: double
+          description: Portfolio beta relative to benchmark
+          example: 1.02
+        modifiedDuration:
+          type: number
+          format: double
+          description: Portfolio modified duration (for fixed income)
+          example: 5.43
+        exposures:
+          type: object
+          description: Factor exposure breakdown
+          properties:
+            marketExposure:
+              type: number
+              format: double
+            creditExposure:
+              type: number
+              format: double
+            currencyExposure:
+              type: number
+              format: double
+
+    Error:
+      type: object
+      description: Error response
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: UNAUTHORIZED
+        message:
+          type: string
+          description: Human-readable error message
+          example: Access token is missing or invalid.
+        correlationId:
+          type: string
+          description: Request correlation ID for support reference
+          format: uuid
