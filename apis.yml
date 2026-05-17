@@ -136,7 +136,7 @@ common:
     url: https://developer.statestreet.com/documentation-usage
   - type: API Standards
     url: https://developer.statestreet.com/api-platform-standards
-  - type: Getting Started
+  - type: GettingStarted
     url: https://developer.statestreet.com/get-started-browser
   - type: Support
     url: mailto:api-support@statestreet.com
@@ -146,9 +146,9 @@ common:
     url: https://twitter.com/StateStreet
   - type: Alpha Platform
     url: https://www.statestreet.com/alpha
-  - type: Privacy Policy
+  - type: PrivacyPolicy
     url: https://www.statestreet.com/us/en/individual-investor/tools-and-resources/privacy-notice
-  - type: Terms of Service
+  - type: TermsOfService
     url: https://www.statestreet.com/us/en/individual-investor/tools-and-resources/terms-and-conditions
   - type: OpenAPI
     url: openapi/state-street-alpha-data-platform-openapi.yml
