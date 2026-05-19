@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: State Street Alpha Data Platform API — Risk
+  description: 'State Street Alpha Data Platform API — Risk. 1 operations. Lead operation: Get Portfolio Risk Analytics. Self-contained
+    Naftiko capability covering one State Street business surface.'
+  tags:
+  - State Street
+  - Risk
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STATE_STREET_API_KEY: STATE_STREET_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: alpha-data-platform-risk
+    baseUri: https://api.statestreet.com/v1
+    description: State Street Alpha Data Platform API — Risk business capability. Self-contained, no shared references.
+    resources:
+    - name: portfolios-portfolioId-risk
+      path: /portfolios/{portfolioId}/risk
+      operations:
+      - name: getportfoliorisk
+        method: GET
+        description: Get Portfolio Risk Analytics
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: portfolioId
+          in: path
+          type: string
+          description: Unique portfolio identifier
+          required: true
+        - name: asOfDate
+          in: query
+          type: string
+          description: As-of date for risk calculation
+    authentication:
+      type: bearer
+      token: '{{env.STATE_STREET_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: alpha-data-platform-risk-rest
+    port: 8080
+    description: REST adapter for State Street Alpha Data Platform API — Risk. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/portfolios/{portfolioid}/risk
+      name: portfolios-portfolioid-risk
+      description: REST surface for portfolios-portfolioId-risk.
+      operations:
+      - method: GET
+        name: getportfoliorisk
+        description: Get Portfolio Risk Analytics
+        call: alpha-data-platform-risk.getportfoliorisk
+        with:
+          portfolioId: rest.portfolioId
+          asOfDate: rest.asOfDate
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: alpha-data-platform-risk-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for State Street Alpha Data Platform API — Risk. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: get-portfolio-risk-analytics
+      description: Get Portfolio Risk Analytics
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: alpha-data-platform-risk.getportfoliorisk
+      with:
+        portfolioId: tools.portfolioId
+        asOfDate: tools.asOfDate
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,131 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: State Street Fund Connect API — Funds
+  description: 'State Street Fund Connect API — Funds. 2 operations. Lead operation: List ETF Funds. Self-contained Naftiko
+    capability covering one State Street business surface.'
+  tags:
+  - State Street
+  - Funds
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STATE_STREET_API_KEY: STATE_STREET_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: fund-connect-funds
+    baseUri: https://api.statestreet.com/v1/fund-connect
+    description: State Street Fund Connect API — Funds business capability. Self-contained, no shared references.
+    resources:
+    - name: funds
+      path: /funds
+      operations:
+      - name: listfunds
+        method: GET
+        description: List ETF Funds
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: market
+          in: query
+          type: string
+          description: Filter by market/exchange
+        - name: pageSize
+          in: query
+          type: integer
+        - name: pageToken
+          in: query
+          type: string
+    - name: funds-fundId
+      path: /funds/{fundId}
+      operations:
+      - name: getfund
+        method: GET
+        description: Get ETF Fund
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: fundId
+          in: path
+          type: string
+          description: Unique fund identifier
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.STATE_STREET_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: fund-connect-funds-rest
+    port: 8080
+    description: REST adapter for State Street Fund Connect API — Funds. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/funds
+      name: funds
+      description: REST surface for funds.
+      operations:
+      - method: GET
+        name: listfunds
+        description: List ETF Funds
+        call: fund-connect-funds.listfunds
+        with:
+          market: rest.market
+          pageSize: rest.pageSize
+          pageToken: rest.pageToken
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/funds/{fundid}
+      name: funds-fundid
+      description: REST surface for funds-fundId.
+      operations:
+      - method: GET
+        name: getfund
+        description: Get ETF Fund
+        call: fund-connect-funds.getfund
+        with:
+          fundId: rest.fundId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: fund-connect-funds-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for State Street Fund Connect API — Funds. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: list-etf-funds
+      description: List ETF Funds
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: fund-connect-funds.listfunds
+      with:
+        market: tools.market
+        pageSize: tools.pageSize
+        pageToken: tools.pageToken
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-etf-fund
+      description: Get ETF Fund
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: fund-connect-funds.getfund
+      with:
+        fundId: tools.fundId
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,110 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: State Street Alpha Data Platform API — Transactions
+  description: 'State Street Alpha Data Platform API — Transactions. 1 operations. Lead operation: List Portfolio Transactions.
+    Self-contained Naftiko capability covering one State Street business surface.'
+  tags:
+  - State Street
+  - Transactions
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STATE_STREET_API_KEY: STATE_STREET_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: alpha-data-platform-transactions
+    baseUri: https://api.statestreet.com/v1
+    description: State Street Alpha Data Platform API — Transactions business capability. Self-contained, no shared references.
+    resources:
+    - name: portfolios-portfolioId-transactions
+      path: /portfolios/{portfolioId}/transactions
+      operations:
+      - name: listportfoliotransactions
+        method: GET
+        description: List Portfolio Transactions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: portfolioId
+          in: path
+          type: string
+          description: Unique portfolio identifier
+          required: true
+        - name: startDate
+          in: query
+          type: string
+          description: Start date for transaction history
+          required: true
+        - name: endDate
+          in: query
+          type: string
+          description: End date for transaction history
+          required: true
+        - name: transactionType
+          in: query
+          type: string
+          description: Filter by transaction type
+        - name: pageSize
+          in: query
+          type: integer
+        - name: pageToken
+          in: query
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.STATE_STREET_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: alpha-data-platform-transactions-rest
+    port: 8080
+    description: REST adapter for State Street Alpha Data Platform API — Transactions. One Spectral-compliant resource per
+      consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/portfolios/{portfolioid}/transactions
+      name: portfolios-portfolioid-transactions
+      description: REST surface for portfolios-portfolioId-transactions.
+      operations:
+      - method: GET
+        name: listportfoliotransactions
+        description: List Portfolio Transactions
+        call: alpha-data-platform-transactions.listportfoliotransactions
+        with:
+          portfolioId: rest.portfolioId
+          startDate: rest.startDate
+          endDate: rest.endDate
+          transactionType: rest.transactionType
+          pageSize: rest.pageSize
+          pageToken: rest.pageToken
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: alpha-data-platform-transactions-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for State Street Alpha Data Platform API — Transactions. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: list-portfolio-transactions
+      description: List Portfolio Transactions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: alpha-data-platform-transactions.listportfoliotransactions
+      with:
+        portfolioId: tools.portfolioId
+        startDate: tools.startDate
+        endDate: tools.endDate
+        transactionType: tools.transactionType
+        pageSize: tools.pageSize
+        pageToken: tools.pageToken
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,133 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: State Street Alpha Data Platform API — Portfolios
+  description: 'State Street Alpha Data Platform API — Portfolios. 2 operations. Lead operation: List Portfolios. Self-contained
+    Naftiko capability covering one State Street business surface.'
+  tags:
+  - State Street
+  - Portfolios
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    STATE_STREET_API_KEY: STATE_STREET_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: alpha-data-platform-portfolios
+    baseUri: https://api.statestreet.com/v1
+    description: State Street Alpha Data Platform API — Portfolios business capability. Self-contained, no shared references.
+    resources:
+    - name: portfolios
+      path: /portfolios
+      operations:
+      - name: listportfolios
+        method: GET
+        description: List Portfolios
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: pageSize
+          in: query
+          type: integer
+          description: Number of portfolios per page (max 100)
+        - name: pageToken
+          in: query
+          type: string
+          description: Pagination token from previous response
+        - name: portfolioType
+          in: query
+          type: string
+          description: Filter by portfolio type
+    - name: portfolios-portfolioId
+      path: /portfolios/{portfolioId}
+      operations:
+      - name: getportfolio
+        method: GET
+        description: Get Portfolio
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: portfolioId
+          in: path
+          type: string
+          description: Unique portfolio identifier
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.STATE_STREET_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: alpha-data-platform-portfolios-rest
+    port: 8080
+    description: REST adapter for State Street Alpha Data Platform API — Portfolios. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/portfolios
+      name: portfolios
+      description: REST surface for portfolios.
+      operations:
+      - method: GET
+        name: listportfolios
+        description: List Portfolios
+        call: alpha-data-platform-portfolios.listportfolios
+        with:
+          pageSize: rest.pageSize
+          pageToken: rest.pageToken
+          portfolioType: rest.portfolioType
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/portfolios/{portfolioid}
+      name: portfolios-portfolioid
+      description: REST surface for portfolios-portfolioId.
+      operations:
+      - method: GET
+        name: getportfolio
+        description: Get Portfolio
+        call: alpha-data-platform-portfolios.getportfolio
+        with:
+          portfolioId: rest.portfolioId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: alpha-data-platform-portfolios-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for State Street Alpha Data Platform API — Portfolios. One tool per consumed operation, routed
+      inline through this capability's consumes block.
+    tools:
+    - name: list-portfolios
+      description: List Portfolios
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: alpha-data-platform-portfolios.listportfolios
+      with:
+        pageSize: tools.pageSize
+        pageToken: tools.pageToken
+        portfolioType: tools.portfolioType
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-portfolio
+      description: Get Portfolio
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: alpha-data-platform-portfolios.getportfolio
+      with:
+        portfolioId: tools.portfolioId
+      outputParameters:
+      - type: object
+        mapping: $.
