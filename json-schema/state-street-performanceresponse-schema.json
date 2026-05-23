@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/PerformanceResponse",
+  "title": "PerformanceResponse",
+  "type": "object",
+  "description": "Portfolio performance measurement data",
+  "properties": {
+    "portfolioId": {
+      "type": "string",
+      "example": "PORT-12345"
+    },
+    "startDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "endDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "frequency": {
+      "type": "string",
+      "example": "MONTHLY"
+    },
+    "portfolioReturn": {
+      "type": "number",
+      "format": "double",
+      "description": "Portfolio time-weighted return for the period (decimal)",
+      "example": 0.0743
+    },
+    "benchmarkReturn": {
+      "type": "number",
+      "format": "double",
+      "description": "Benchmark return for the period (decimal)",
+      "example": 0.0681
+    },
+    "activeReturn": {
+      "type": "number",
+      "format": "double",
+      "description": "Active return vs benchmark (decimal)",
+      "example": 0.0062
+    },
+    "periods": {
+      "type": "array",
+      "description": "Performance data by period",
+      "items": {
+        "type": "object",
+        "properties": {
+          "periodStart": {
+            "type": "string",
+            "format": "date"
+          },
+          "periodEnd": {
+            "type": "string",
+            "format": "date"
+          },
+          "portfolioReturn": {
+            "type": "number",
+            "format": "double"
+          },
+          "benchmarkReturn": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/OrderListResponse",
+  "title": "OrderListResponse",
+  "type": "object",
+  "properties": {
+    "orders": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Order"
+      }
+    },
+    "nextPageToken": {
+      "type": "string"
+    },
+    "totalCount": {
+      "type": "integer"
+    }
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "provider": "State Street",
+  "providerId": "state-street",
+  "kind": "json-structure",
+  "description": "Structural overview of the State Street API surface; extracted from openapi/.",
+  "schemaCount": 9,
+  "operationCount": 6,
+  "schemas": [
+    {
+      "name": "PortfolioListResponse",
+      "type": "object",
+      "propertyCount": 3,
+      "required": []
+    },
+    {
+      "name": "Portfolio",
+      "type": "object",
+      "propertyCount": 8,
+      "required": []
+    },
+    {
+      "name": "PositionListResponse",
+      "type": "object",
+      "propertyCount": 5,
+      "required": []
+    },
+    {
+      "name": "Position",
+      "type": "object",
+      "propertyCount": 11,
+      "required": []
+    },
+    {
+      "name": "TransactionListResponse",
+      "type": "object",
+      "propertyCount": 6,
+      "required": []
+    },
+    {
+      "name": "Transaction",
+      "type": "object",
+      "propertyCount": 11,
+      "required": []
+    },
+    {
+      "name": "PerformanceResponse",
+      "type": "object",
+      "propertyCount": 8,
+      "required": []
+    },
+    {
+      "name": "RiskResponse",
+      "type": "object",
+      "propertyCount": 8,
+      "required": []
+    },
+    {
+      "name": "Error",
+      "type": "object",
+      "propertyCount": 3,
+      "required": []
+    }
+  ],
+  "operations": [
+    {
+      "method": "GET",
+      "path": "/portfolios",
+      "operationId": "listPortfolios",
+      "summary": "List Portfolios",
+      "tags": [
+        "Portfolios"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/portfolios/{portfolioId}",
+      "operationId": "getPortfolio",
+      "summary": "Get Portfolio",
+      "tags": [
+        "Portfolios"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/portfolios/{portfolioId}/positions",
+      "operationId": "listPortfolioPositions",
+      "summary": "List Portfolio Positions",
+      "tags": [
+        "Positions"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/portfolios/{portfolioId}/transactions",
+      "operationId": "listPortfolioTransactions",
+      "summary": "List Portfolio Transactions",
+      "tags": [
+        "Transactions"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/portfolios/{portfolioId}/performance",
+      "operationId": "getPortfolioPerformance",
+      "summary": "Get Portfolio Performance",
+      "tags": [
+        "Performance"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/portfolios/{portfolioId}/risk",
+      "operationId": "getPortfolioRisk",
+      "summary": "Get Portfolio Risk Analytics",
+      "tags": [
+        "Risk"
+      ]
+    }
+  ]
+}

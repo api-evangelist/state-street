@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/RiskResponse",
+  "title": "RiskResponse",
+  "type": "object",
+  "description": "Portfolio risk analytics",
+  "properties": {
+    "portfolioId": {
+      "type": "string",
+      "example": "PORT-12345"
+    },
+    "asOfDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "valueAtRisk95": {
+      "type": "number",
+      "format": "double",
+      "description": "95% confidence level 1-day Value at Risk (decimal)",
+      "example": 0.0142
+    },
+    "valueAtRisk99": {
+      "type": "number",
+      "format": "double",
+      "description": "99% confidence level 1-day Value at Risk (decimal)",
+      "example": 0.0218
+    },
+    "trackingError": {
+      "type": "number",
+      "format": "double",
+      "description": "Annualized tracking error vs benchmark (decimal)",
+      "example": 0.0315
+    },
+    "beta": {
+      "type": "number",
+      "format": "double",
+      "description": "Portfolio beta relative to benchmark",
+      "example": 1.02
+    },
+    "modifiedDuration": {
+      "type": "number",
+      "format": "double",
+      "description": "Portfolio modified duration (for fixed income)",
+      "example": 5.43
+    },
+    "exposures": {
+      "type": "object",
+      "description": "Factor exposure breakdown",
+      "properties": {
+        "marketExposure": {
+          "type": "number",
+          "format": "double"
+        },
+        "creditExposure": {
+          "type": "number",
+          "format": "double"
+        },
+        "currencyExposure": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    }
+  }
+}

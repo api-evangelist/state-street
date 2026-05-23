@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/Order",
+  "title": "Order",
+  "type": "object",
+  "description": "An ETF creation or redemption order",
+  "properties": {
+    "orderId": {
+      "type": "string",
+      "description": "Unique Fund Connect order identifier",
+      "example": "FC-2026-0502-00123"
+    },
+    "clientOrderId": {
+      "type": "string",
+      "description": "Client-provided reference ID",
+      "example": "CLIENT-ORDER-98765"
+    },
+    "fundId": {
+      "type": "string",
+      "example": "ETF-SPDR-SPY"
+    },
+    "orderType": {
+      "type": "string",
+      "enum": [
+        "CREATION",
+        "REDEMPTION"
+      ],
+      "example": "CREATION"
+    },
+    "units": {
+      "type": "integer",
+      "description": "Number of creation/redemption units ordered",
+      "example": 5
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "ACCEPTED",
+        "PROCESSING",
+        "SETTLED",
+        "REJECTED",
+        "CANCELLED"
+      ],
+      "example": "ACCEPTED"
+    },
+    "submittedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Order submission timestamp"
+    },
+    "tradeDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Trade date"
+    },
+    "settlementDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Expected settlement date"
+    }
+  }
+}

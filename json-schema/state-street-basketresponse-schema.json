@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/BasketResponse",
+  "title": "BasketResponse",
+  "type": "object",
+  "description": "ETF portfolio basket composition",
+  "properties": {
+    "fundId": {
+      "type": "string",
+      "example": "ETF-SPDR-SPY"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "cashComponent": {
+      "type": "number",
+      "format": "double",
+      "description": "Cash component per creation unit in base currency",
+      "example": 1250.5
+    },
+    "securities": {
+      "type": "array",
+      "description": "In-kind securities required per creation/redemption unit",
+      "items": {
+        "type": "object",
+        "properties": {
+          "securityId": {
+            "type": "string",
+            "example": "US0378331005"
+          },
+          "securityIdType": {
+            "type": "string",
+            "example": "ISIN"
+          },
+          "securityName": {
+            "type": "string",
+            "example": "Apple Inc"
+          },
+          "ticker": {
+            "type": "string",
+            "example": "AAPL"
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double",
+            "description": "Shares per creation unit",
+            "example": 1250
+          }
+        }
+      }
+    }
+  }
+}

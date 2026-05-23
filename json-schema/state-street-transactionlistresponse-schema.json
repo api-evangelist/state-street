@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/TransactionListResponse",
+  "title": "TransactionListResponse",
+  "type": "object",
+  "description": "Paginated list of transactions",
+  "properties": {
+    "portfolioId": {
+      "type": "string",
+      "example": "PORT-12345"
+    },
+    "startDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "endDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "transactions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Transaction"
+      }
+    },
+    "nextPageToken": {
+      "type": "string"
+    },
+    "totalCount": {
+      "type": "integer"
+    }
+  }
+}

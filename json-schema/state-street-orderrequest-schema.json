@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/OrderRequest",
+  "title": "OrderRequest",
+  "type": "object",
+  "required": [
+    "fundId",
+    "orderType",
+    "units"
+  ],
+  "description": "ETF creation or redemption order request",
+  "properties": {
+    "fundId": {
+      "type": "string",
+      "description": "Fund identifier",
+      "example": "ETF-SPDR-SPY"
+    },
+    "orderType": {
+      "type": "string",
+      "description": "Order type",
+      "enum": [
+        "CREATION",
+        "REDEMPTION"
+      ],
+      "example": "CREATION"
+    },
+    "units": {
+      "type": "integer",
+      "description": "Number of creation/redemption units",
+      "minimum": 1,
+      "example": 5
+    },
+    "settlementType": {
+      "type": "string",
+      "description": "Settlement instruction type",
+      "enum": [
+        "IN_KIND",
+        "CASH"
+      ],
+      "default": "IN_KIND"
+    },
+    "clientOrderId": {
+      "type": "string",
+      "description": "Client-provided reference ID",
+      "example": "CLIENT-ORDER-98765"
+    }
+  }
+}

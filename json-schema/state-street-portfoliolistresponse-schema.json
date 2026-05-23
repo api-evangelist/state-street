@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/PortfolioListResponse",
+  "title": "PortfolioListResponse",
+  "type": "object",
+  "description": "Paginated list of portfolios",
+  "properties": {
+    "portfolios": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Portfolio"
+      }
+    },
+    "nextPageToken": {
+      "type": "string",
+      "description": "Token to retrieve the next page of results"
+    },
+    "totalCount": {
+      "type": "integer",
+      "description": "Total number of portfolios accessible"
+    }
+  }
+}

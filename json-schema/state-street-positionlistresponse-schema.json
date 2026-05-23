@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/PositionListResponse",
+  "title": "PositionListResponse",
+  "type": "object",
+  "description": "Paginated list of portfolio positions",
+  "properties": {
+    "portfolioId": {
+      "type": "string",
+      "example": "PORT-12345"
+    },
+    "asOfDate": {
+      "type": "string",
+      "format": "date",
+      "description": "As-of date for the positions"
+    },
+    "positions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Position"
+      }
+    },
+    "nextPageToken": {
+      "type": "string"
+    },
+    "totalCount": {
+      "type": "integer"
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "#/components/schemas/Fund",
+  "title": "Fund",
+  "type": "object",
+  "description": "An ETF fund available on Fund Connect",
+  "properties": {
+    "fundId": {
+      "type": "string",
+      "description": "Unique fund identifier",
+      "example": "ETF-SPDR-SPY"
+    },
+    "fundName": {
+      "type": "string",
+      "description": "Full fund name",
+      "example": "SPDR S&P 500 ETF Trust"
+    },
+    "ticker": {
+      "type": "string",
+      "description": "Exchange ticker symbol",
+      "example": "SPY"
+    },
+    "isin": {
+      "type": "string",
+      "description": "ISIN code",
+      "example": "US78462F1030"
+    },
+    "baseCurrency": {
+      "type": "string",
+      "description": "Fund base currency",
+      "example": "USD"
+    },
+    "exchange": {
+      "type": "string",
+      "description": "Primary exchange",
+      "example": "NYSE Arca"
+    },
+    "creationUnit": {
+      "type": "integer",
+      "description": "Number of shares per creation/redemption unit",
+      "example": 50000
+    },
+    "fundManager": {
+      "type": "string",
+      "description": "Fund manager/sponsor name",
+      "example": "State Street Global Advisors"
+    },
+    "custodian": {
+      "type": "string",
+      "description": "Fund custodian",
+      "example": "State Street Bank"
+    }
+  }
+}
