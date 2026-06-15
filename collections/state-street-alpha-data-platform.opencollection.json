@@ -1,0 +1,297 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "State Street Alpha Data Platform API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://api.statestreet.com/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Portfolios",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Portfolios",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.statestreet.com/v1/portfolios",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Number of portfolios per page (max 100)"
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token from previous response"
+              },
+              {
+                "name": "portfolioType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by portfolio type"
+              }
+            ]
+          },
+          "docs": "Retrieve a list of portfolios accessible to the authenticated client application. Returns portfolio identifiers, names, types, base currencies, and inception dates. Supports pagination for large portfolio sets."
+        },
+        {
+          "info": {
+            "name": "Get Portfolio",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.statestreet.com/v1/portfolios/:portfolioId",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "portfolioId",
+                "value": "",
+                "type": "path",
+                "description": "Unique portfolio identifier"
+              }
+            ]
+          },
+          "docs": "Retrieve detailed information for a specific portfolio including its current market value, base currency, inception date, benchmark assignment, and portfolio manager details."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Positions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Portfolio Positions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.statestreet.com/v1/portfolios/:portfolioId/positions",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "portfolioId",
+                "value": "",
+                "type": "path",
+                "description": "Unique portfolio identifier"
+              },
+              {
+                "name": "asOfDate",
+                "value": "",
+                "type": "query",
+                "description": "As-of date for positions (defaults to latest available)"
+              },
+              {
+                "name": "assetClass",
+                "value": "",
+                "type": "query",
+                "description": "Filter by asset class"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve current positions for a portfolio as of the specified date or in near real-time intraday. Returns security identifiers, quantities, market values, cost basis, unrealized gain/loss, and accrued income for each position."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Transactions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Portfolio Transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.statestreet.com/v1/portfolios/:portfolioId/transactions",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "portfolioId",
+                "value": "",
+                "type": "path",
+                "description": "Unique portfolio identifier"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date for transaction history"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date for transaction history"
+              },
+              {
+                "name": "transactionType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by transaction type"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve transaction history for a portfolio over a specified date range. Returns trade details, corporate actions, cash movements, income events, and settlement status. Supports filtering by transaction type and date range."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Performance",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Portfolio Performance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.statestreet.com/v1/portfolios/:portfolioId/performance",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "portfolioId",
+                "value": "",
+                "type": "path",
+                "description": "Unique portfolio identifier"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Performance measurement start date"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "Performance measurement end date"
+              },
+              {
+                "name": "frequency",
+                "value": "",
+                "type": "query",
+                "description": "Performance calculation frequency"
+              }
+            ]
+          },
+          "docs": "Retrieve performance measurement and attribution data for a portfolio over a specified period. Returns time-weighted returns, money-weighted returns, and benchmark-relative performance. Supports daily and monthly calculation frequencies using industry-standard methodologies for all asset types."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Risk",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Portfolio Risk Analytics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.statestreet.com/v1/portfolios/:portfolioId/risk",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "portfolioId",
+                "value": "",
+                "type": "path",
+                "description": "Unique portfolio identifier"
+              },
+              {
+                "name": "asOfDate",
+                "value": "",
+                "type": "query",
+                "description": "As-of date for risk calculation"
+              }
+            ]
+          },
+          "docs": "Retrieve risk analytics for a portfolio including value at risk (VaR), tracking error, beta, duration, convexity, and factor exposures. The TrueView risk analytics engine provides scenario analysis and stress testing capabilities for regulatory reporting and investment decision-making."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

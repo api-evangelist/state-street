@@ -1,0 +1,252 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "State Street Fund Connect API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://api.statestreet.com/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Funds",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List ETF Funds",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.statestreet.com/v1/fund-connect/funds",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "market",
+                "value": "",
+                "type": "query",
+                "description": "Filter by market/exchange"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve a list of ETF funds available for creation and redemption through Fund Connect. Returns fund identifiers, names, tickers, base currencies, and authorized participant entitlements."
+        },
+        {
+          "info": {
+            "name": "Get ETF Fund",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.statestreet.com/v1/fund-connect/funds/:fundId",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "fundId",
+                "value": "",
+                "type": "path",
+                "description": "Unique fund identifier"
+              }
+            ]
+          },
+          "docs": "Retrieve detailed information for a specific ETF fund including its composition requirements, minimum creation/redemption unit size, and authorized participant eligibility."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Baskets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get ETF Portfolio Basket",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.statestreet.com/v1/fund-connect/funds/:fundId/baskets",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "fundId",
+                "value": "",
+                "type": "path",
+                "description": "Unique fund identifier"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date for which to retrieve the basket composition"
+              }
+            ]
+          },
+          "docs": "Retrieve the current portfolio composition basket for an ETF fund. Returns the in-kind securities list with required quantities for creation/redemption units, as well as any cash component. Baskets are published daily prior to market open."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Orders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List ETF Orders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.statestreet.com/v1/fund-connect/orders",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "fundId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by fund identifier"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by order status"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve a list of ETF creation and redemption orders submitted by the authenticated authorized participant. Supports filtering by order status, fund, and date range."
+        },
+        {
+          "info": {
+            "name": "Create ETF Order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.statestreet.com/v1/fund-connect/orders",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit an ETF creation or redemption order through Fund Connect. Authorized participants can request creation of new ETF shares by delivering the in-kind basket, or redeem existing ETF shares to receive the underlying basket securities. Orders are processed at end-of-day NAV."
+        },
+        {
+          "info": {
+            "name": "Get ETF Order",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.statestreet.com/v1/fund-connect/orders/:orderId",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "path",
+                "description": "Unique order identifier"
+              }
+            ]
+          },
+          "docs": "Retrieve the current status and details of a specific ETF creation or redemption order including basket delivery confirmation and settlement status."
+        },
+        {
+          "info": {
+            "name": "Cancel ETF Order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.statestreet.com/v1/fund-connect/orders/:orderId/cancel",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "orderId",
+                "value": "",
+                "type": "path",
+                "description": "Unique order identifier"
+              }
+            ]
+          },
+          "docs": "Cancel a pending ETF creation or redemption order before it has been accepted for processing. Orders can only be cancelled while in PENDING status."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

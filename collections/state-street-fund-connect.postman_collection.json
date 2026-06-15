@@ -1,0 +1,1358 @@
+{
+  "item": [
+    {
+      "id": "957a85fc-7a76-42c7-83ab-d23f5cd7b687",
+      "name": "Orders",
+      "description": {
+        "content": "ETF creation and redemption order operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ea9517ba-6a34-4812-b9a2-5ca4f83ef083",
+          "name": "Create ETF Order",
+          "request": {
+            "name": "Create ETF Order",
+            "description": {
+              "content": "Submit an ETF creation or redemption order through Fund Connect. Authorized participants can request creation of new ETF shares by delivering the in-kind basket, or redeem existing ETF shares to receive the underlying basket securities. Orders are processed at end-of-day NAV.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fundId\": \"<string>\",\n  \"orderType\": \"<string>\",\n  \"units\": \"<integer>\",\n  \"settlementType\": \"IN_KIND\",\n  \"clientOrderId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cf518767-1cc0-4514-a9bb-69073b8206db",
+              "name": "Order successfully submitted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fundId\": \"ETF-SPDR-SPY\",\n  \"orderType\": \"CREATION\",\n  \"units\": 5,\n  \"settlementType\": \"IN_KIND\",\n  \"clientOrderId\": \"CLIENT-ORDER-98765\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"orderId\": \"FC-2026-0502-00123\",\n  \"clientOrderId\": \"CLIENT-ORDER-98765\",\n  \"fundId\": \"ETF-SPDR-SPY\",\n  \"orderType\": \"CREATION\",\n  \"units\": 5,\n  \"status\": \"ACCEPTED\",\n  \"submittedAt\": \"1992-11-04T00:28:10.453Z\",\n  \"tradeDate\": \"1950-08-25\",\n  \"settlementDate\": \"1960-01-05\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cb4d6a80-c59b-4672-bcb9-051c18b61246",
+              "name": "Invalid order request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fundId\": \"ETF-SPDR-SPY\",\n  \"orderType\": \"CREATION\",\n  \"units\": 5,\n  \"settlementType\": \"IN_KIND\",\n  \"clientOrderId\": \"CLIENT-ORDER-98765\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"UNAUTHORIZED\",\n  \"message\": \"Access token is missing or invalid.\",\n  \"correlationId\": \"cd7a24cc-1d71-6f55-fc67-47a737d4e6f5\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b3273ffe-c994-412d-8581-3948af320699",
+              "name": "Not authorized as AP for this fund",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"fundId\": \"ETF-SPDR-SPY\",\n  \"orderType\": \"CREATION\",\n  \"units\": 5,\n  \"settlementType\": \"IN_KIND\",\n  \"clientOrderId\": \"CLIENT-ORDER-98765\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"UNAUTHORIZED\",\n  \"message\": \"Access token is missing or invalid.\",\n  \"correlationId\": \"cd7a24cc-1d71-6f55-fc67-47a737d4e6f5\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1744cf11-890d-45e5-9908-cb63f82e4f60",
+          "name": "List ETF Orders",
+          "request": {
+            "name": "List ETF Orders",
+            "description": {
+              "content": "Retrieve a list of ETF creation and redemption orders submitted by the authenticated authorized participant. Supports filtering by order status, fund, and date range.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fundId",
+                  "value": "<string>",
+                  "description": "Filter by fund identifier"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter by order status"
+                },
+                {
+                  "disabled": false,
+                  "key": "startDate",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "endDate",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "25"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Client-provided correlation ID for request tracing",
+                "key": "X-Correlation-ID",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f7887d16-8931-4e35-b55e-f276c37a1daa",
+              "name": "List of ETF orders",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fundId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"orders\": [\n    {\n      \"orderId\": \"FC-2026-0502-00123\",\n      \"clientOrderId\": \"CLIENT-ORDER-98765\",\n      \"fundId\": \"ETF-SPDR-SPY\",\n      \"orderType\": \"CREATION\",\n      \"units\": 5,\n      \"status\": \"ACCEPTED\",\n      \"submittedAt\": \"1988-02-01T21:53:37.168Z\",\n      \"tradeDate\": \"1978-11-01\",\n      \"settlementDate\": \"1994-04-20\"\n    },\n    {\n      \"orderId\": \"FC-2026-0502-00123\",\n      \"clientOrderId\": \"CLIENT-ORDER-98765\",\n      \"fundId\": \"ETF-SPDR-SPY\",\n      \"orderType\": \"CREATION\",\n      \"units\": 5,\n      \"status\": \"ACCEPTED\",\n      \"submittedAt\": \"1982-12-27T00:31:56.550Z\",\n      \"tradeDate\": \"2001-03-25\",\n      \"settlementDate\": \"2000-01-03\"\n    }\n  ],\n  \"nextPageToken\": \"string\",\n  \"totalCount\": 4479\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8fb1661b-7f99-4924-a002-d9e38e114e29",
+          "name": "Get ETF Order",
+          "request": {
+            "name": "Get ETF Order",
+            "description": {
+              "content": "Retrieve the current status and details of a specific ETF creation or redemption order including basket delivery confirmation and settlement status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders",
+                ":orderId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orderId",
+                  "description": "(Required) Unique order identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Client-provided correlation ID for request tracing",
+                "key": "X-Correlation-ID",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d5000c38-1d9a-46b5-afb4-bf305ba1b0a8",
+              "name": "ETF order details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    ":orderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) Unique order identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"orderId\": \"FC-2026-0502-00123\",\n  \"clientOrderId\": \"CLIENT-ORDER-98765\",\n  \"fundId\": \"ETF-SPDR-SPY\",\n  \"orderType\": \"CREATION\",\n  \"units\": 5,\n  \"status\": \"ACCEPTED\",\n  \"submittedAt\": \"1992-11-04T00:28:10.453Z\",\n  \"tradeDate\": \"1950-08-25\",\n  \"settlementDate\": \"1960-01-05\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "78d8e175-413b-43fb-8d17-77ab58438e54",
+              "name": "Order not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    ":orderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) Unique order identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"UNAUTHORIZED\",\n  \"message\": \"Access token is missing or invalid.\",\n  \"correlationId\": \"cd7a24cc-1d71-6f55-fc67-47a737d4e6f5\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f2dda000-9fe4-4c7d-941b-669143ee55df",
+          "name": "Cancel ETF Order",
+          "request": {
+            "name": "Cancel ETF Order",
+            "description": {
+              "content": "Cancel a pending ETF creation or redemption order before it has been accepted for processing. Orders can only be cancelled while in PENDING status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders",
+                ":orderId",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orderId",
+                  "description": "(Required) Unique order identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Client-provided correlation ID for request tracing",
+                "key": "X-Correlation-ID",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f9a61835-9ec2-4b12-b12b-a848e449ceb7",
+              "name": "Order successfully cancelled",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) Unique order identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"orderId\": \"FC-2026-0502-00123\",\n  \"clientOrderId\": \"CLIENT-ORDER-98765\",\n  \"fundId\": \"ETF-SPDR-SPY\",\n  \"orderType\": \"CREATION\",\n  \"units\": 5,\n  \"status\": \"ACCEPTED\",\n  \"submittedAt\": \"1992-11-04T00:28:10.453Z\",\n  \"tradeDate\": \"1950-08-25\",\n  \"settlementDate\": \"1960-01-05\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1337947-47bb-4dd1-bba1-98687d9d9c69",
+              "name": "Order not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) Unique order identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"UNAUTHORIZED\",\n  \"message\": \"Access token is missing or invalid.\",\n  \"correlationId\": \"cd7a24cc-1d71-6f55-fc67-47a737d4e6f5\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8b56c288-7b31-4d05-8040-06b0ad5086b9",
+              "name": "Order cannot be cancelled in current state",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) Unique order identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"UNAUTHORIZED\",\n  \"message\": \"Access token is missing or invalid.\",\n  \"correlationId\": \"cd7a24cc-1d71-6f55-fc67-47a737d4e6f5\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "7c683202-9e03-4782-a942-b693f8da35ea",
+      "name": "Baskets",
+      "description": {
+        "content": "ETF portfolio composition basket operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d9efc0d1-6ca9-42fd-9448-a891fc09d699",
+          "name": "Get ETF Portfolio Basket",
+          "request": {
+            "name": "Get ETF Portfolio Basket",
+            "description": {
+              "content": "Retrieve the current portfolio composition basket for an ETF fund. Returns the in-kind securities list with required quantities for creation/redemption units, as well as any cash component. Baskets are published daily prior to market open.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "funds",
+                ":fundId",
+                "baskets"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "<date>",
+                  "description": "Date for which to retrieve the basket composition"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "fundId",
+                  "description": "(Required) Unique fund identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Client-provided correlation ID for request tracing",
+                "key": "X-Correlation-ID",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "477ec8a3-dc17-4d22-99e2-8cb3ff0bd7c3",
+              "name": "ETF portfolio basket composition",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "funds",
+                    ":fundId",
+                    "baskets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "2026-05-02"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fundId",
+                      "description": "(Required) Unique fund identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"fundId\": \"ETF-SPDR-SPY\",\n  \"date\": \"1981-10-23\",\n  \"cashComponent\": 1250.5,\n  \"securities\": [\n    {\n      \"securityId\": \"US0378331005\",\n      \"securityIdType\": \"ISIN\",\n      \"securityName\": \"Apple Inc\",\n      \"ticker\": \"AAPL\",\n      \"quantity\": 1250\n    },\n    {\n      \"securityId\": \"US0378331005\",\n      \"securityIdType\": \"ISIN\",\n      \"securityName\": \"Apple Inc\",\n      \"ticker\": \"AAPL\",\n      \"quantity\": 1250\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "48894fda-b3df-42ab-9c06-219b11871916",
+              "name": "Fund or basket not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "funds",
+                    ":fundId",
+                    "baskets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "2026-05-02"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fundId",
+                      "description": "(Required) Unique fund identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"UNAUTHORIZED\",\n  \"message\": \"Access token is missing or invalid.\",\n  \"correlationId\": \"cd7a24cc-1d71-6f55-fc67-47a737d4e6f5\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "edb61b2f-1685-467d-8444-9ffdb4f2a09c",
+      "name": "Funds",
+      "description": {
+        "content": "ETF fund information operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "76ccbf67-41f7-4361-b5b3-179238b33b8e",
+          "name": "List ETF Funds",
+          "request": {
+            "name": "List ETF Funds",
+            "description": {
+              "content": "Retrieve a list of ETF funds available for creation and redemption through Fund Connect. Returns fund identifiers, names, tickers, base currencies, and authorized participant entitlements.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "funds"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "market",
+                  "value": "<string>",
+                  "description": "Filter by market/exchange"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "25"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Client-provided correlation ID for request tracing",
+                "key": "X-Correlation-ID",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a9ac5105-36bc-49b1-a7e1-1553d39461e2",
+              "name": "List of ETF funds",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "funds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "market",
+                      "value": "US"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"funds\": [\n    {\n      \"fundId\": \"ETF-SPDR-SPY\",\n      \"fundName\": \"SPDR S&P 500 ETF Trust\",\n      \"ticker\": \"SPY\",\n      \"isin\": \"US78462F1030\",\n      \"baseCurrency\": \"USD\",\n      \"exchange\": \"NYSE Arca\",\n      \"creationUnit\": 50000,\n      \"fundManager\": \"State Street Global Advisors\",\n      \"custodian\": \"State Street Bank\"\n    },\n    {\n      \"fundId\": \"ETF-SPDR-SPY\",\n      \"fundName\": \"SPDR S&P 500 ETF Trust\",\n      \"ticker\": \"SPY\",\n      \"isin\": \"US78462F1030\",\n      \"baseCurrency\": \"USD\",\n      \"exchange\": \"NYSE Arca\",\n      \"creationUnit\": 50000,\n      \"fundManager\": \"State Street Global Advisors\",\n      \"custodian\": \"State Street Bank\"\n    }\n  ],\n  \"nextPageToken\": \"string\",\n  \"totalCount\": 8089\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "476f48ae-fb37-4d77-bbd2-6695d9b10d56",
+              "name": "Authentication required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "funds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "market",
+                      "value": "US"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"UNAUTHORIZED\",\n  \"message\": \"Access token is missing or invalid.\",\n  \"correlationId\": \"cd7a24cc-1d71-6f55-fc67-47a737d4e6f5\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5b6a902f-bb14-4788-b5a2-e135906a2192",
+          "name": "Get ETF Fund",
+          "request": {
+            "name": "Get ETF Fund",
+            "description": {
+              "content": "Retrieve detailed information for a specific ETF fund including its composition requirements, minimum creation/redemption unit size, and authorized participant eligibility.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "funds",
+                ":fundId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "fundId",
+                  "description": "(Required) Unique fund identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Client-provided correlation ID for request tracing",
+                "key": "X-Correlation-ID",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fa21c3cc-bf5e-4b0c-a8e1-a2b20b7a5dd2",
+              "name": "ETF fund details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "funds",
+                    ":fundId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fundId",
+                      "description": "(Required) Unique fund identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"fundId\": \"ETF-SPDR-SPY\",\n  \"fundName\": \"SPDR S&P 500 ETF Trust\",\n  \"ticker\": \"SPY\",\n  \"isin\": \"US78462F1030\",\n  \"baseCurrency\": \"USD\",\n  \"exchange\": \"NYSE Arca\",\n  \"creationUnit\": 50000,\n  \"fundManager\": \"State Street Global Advisors\",\n  \"custodian\": \"State Street Bank\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "11a189a9-6e8c-4a48-9936-89a30e598e92",
+              "name": "Fund not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "funds",
+                    ":fundId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fundId",
+                      "description": "(Required) Unique fund identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"UNAUTHORIZED\",\n  \"message\": \"Access token is missing or invalid.\",\n  \"correlationId\": \"cd7a24cc-1d71-6f55-fc67-47a737d4e6f5\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "1cd96a71-a7ab-4cd0-8d20-1bf91f68fa2a",
+      "name": "Settlement",
+      "description": {
+        "content": "Order settlement and confirmation operations",
+        "type": "text/plain"
+      },
+      "item": [],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.statestreet.com/v1/fund-connect",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "fund-connect:orders:read fund-connect:orders:write fund-connect:baskets:read"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.statestreet.com/oauth/token"
+      },
+      {
+        "key": "grant_type",
+        "value": "client_credentials"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "0c5f5053-4838-49e5-a2f4-fd3f8f903aad",
+    "name": "State Street Fund Connect API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The State Street Fund Connect API enables authorized participants (APs), ETF fund managers, and custodians to programmatically manage ETF creation and redemption orders through the Fund Connect platform. Fund Connect is a global online portal for the creation and redemption of ETFs. The API supports automated order entry, basket composition retrieval, order status tracking, and settlement confirmation. In 2025, Fund Connect executed the first API-based ETF order for an Australian-domiciled ETF. The platform processes ETF transactions across all major markets. Authentication uses OAuth 2.0 Client Credentials per RFC 6749 Section 4.4.2.\n\nContact Support:\n Name: State Street API Support\n Email: api-support@statestreet.com",
+      "type": "text/plain"
+    }
+  }
+}
