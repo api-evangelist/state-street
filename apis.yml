@@ -118,7 +118,7 @@ common:
     url: https://github.com/statestreet
   - type: Website
     url: https://www.statestreet.com
-  - type: Developer Portal
+  - type: DeveloperPortal
     url: https://developer.statestreet.com
   - type: API Catalog
     url: https://developer.statestreet.com/apis-list
