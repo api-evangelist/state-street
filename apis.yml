@@ -114,6 +114,10 @@ apis:
       - type: Documentation
         url: https://developer.statestreet.com/get-started-browser
 common:
+  - type: Authentication
+    url: authentication/state-street-authentication.yml
+  - type: OAuthScopes
+    url: scopes/state-street-scopes.yml
   - type: GitHubOrganization
     url: https://github.com/statestreet
   - type: Website

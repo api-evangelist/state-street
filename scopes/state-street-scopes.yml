@@ -1,0 +1,65 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/state-street-alpha-data-platform-openapi.yml, openapi/state-street-fund-connect-openapi.yml
+schemes:
+- name: OAuth2
+  source: openapi/state-street-alpha-data-platform-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.statestreet.com/oauth/token
+  description: OAuth 2.0 Client Credentials flow per RFC 6749 Section 4.4.2. Requires multifactor
+    authentication for all user access.
+- name: OAuth2
+  source: openapi/state-street-fund-connect-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.statestreet.com/oauth/token
+scopes:
+- scope: fund-connect:baskets:read
+  description: Read ETF portfolio basket compositions
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/state-street-fund-connect-openapi.yml
+- scope: fund-connect:orders:read
+  description: Read ETF order history and status
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/state-street-fund-connect-openapi.yml
+- scope: fund-connect:orders:write
+  description: Submit and cancel ETF orders
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/state-street-fund-connect-openapi.yml
+- scope: performance:read
+  description: Read performance measurement and attribution data
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/state-street-alpha-data-platform-openapi.yml
+- scope: portfolio:read
+  description: Read portfolio metadata and account information
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/state-street-alpha-data-platform-openapi.yml
+- scope: positions:read
+  description: Read portfolio positions and holdings
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/state-street-alpha-data-platform-openapi.yml
+- scope: risk:read
+  description: Read risk analytics and exposure data
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/state-street-alpha-data-platform-openapi.yml
+- scope: transactions:read
+  description: Read transaction history
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/state-street-alpha-data-platform-openapi.yml
