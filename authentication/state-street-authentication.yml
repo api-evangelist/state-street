@@ -1,0 +1,20 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/state-street-alpha-data-platform-openapi.yml, openapi/state-street-fund-connect-openapi.yml
+summary:
+  types:
+  - oauth2
+  oauth2_flows:
+  - clientCredentials
+schemes:
+- name: OAuth2
+  type: oauth2
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.statestreet.com/oauth/token
+    scopes: 5
+  description: OAuth 2.0 Client Credentials flow per RFC 6749 Section 4.4.2. Requires multifactor
+    authentication for all user access.
+  sources:
+  - openapi/state-street-alpha-data-platform-openapi.yml
+  - openapi/state-street-fund-connect-openapi.yml
