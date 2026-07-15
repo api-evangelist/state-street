@@ -1,0 +1,226 @@
+generated: '2026-07-15'
+method: generated
+source: openapi/state-street-alpha-data-platform-openapi.yml, openapi/state-street-fund-connect-openapi.yml
+description: Recommended x-agentic-access execution contracts, classified heuristically from
+  the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
+  audience per deployment. See research/curity/agentic-governance/.
+summary:
+  operations: 13
+  by_action_class:
+    connected: 11
+    acting: 2
+  by_consequence:
+    read: 11
+    physical: 2
+  human_in_the_loop_required: 0
+operations:
+- path: /portfolios
+  method: get
+  operationId: listPortfolios
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - performance:read
+    - portfolio:read
+    - positions:read
+    - risk:read
+    - transactions:read
+- path: /portfolios/{portfolioId}
+  method: get
+  operationId: getPortfolio
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - performance:read
+    - portfolio:read
+    - positions:read
+    - risk:read
+    - transactions:read
+- path: /portfolios/{portfolioId}/positions
+  method: get
+  operationId: listPortfolioPositions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - performance:read
+    - portfolio:read
+    - positions:read
+    - risk:read
+    - transactions:read
+- path: /portfolios/{portfolioId}/transactions
+  method: get
+  operationId: listPortfolioTransactions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - performance:read
+    - portfolio:read
+    - positions:read
+    - risk:read
+    - transactions:read
+- path: /portfolios/{portfolioId}/performance
+  method: get
+  operationId: getPortfolioPerformance
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - performance:read
+    - portfolio:read
+    - positions:read
+    - risk:read
+    - transactions:read
+- path: /portfolios/{portfolioId}/risk
+  method: get
+  operationId: getPortfolioRisk
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - performance:read
+    - portfolio:read
+    - positions:read
+    - risk:read
+    - transactions:read
+- path: /funds
+  method: get
+  operationId: listFunds
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - fund-connect:baskets:read
+    - fund-connect:orders:read
+    - fund-connect:orders:write
+- path: /funds/{fundId}
+  method: get
+  operationId: getFund
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - fund-connect:baskets:read
+    - fund-connect:orders:read
+    - fund-connect:orders:write
+- path: /funds/{fundId}/baskets
+  method: get
+  operationId: getFundBasket
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - fund-connect:baskets:read
+    - fund-connect:orders:read
+    - fund-connect:orders:write
+- path: /orders
+  method: post
+  operationId: createOrder
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+    scope:
+    - fund-connect:baskets:read
+    - fund-connect:orders:read
+    - fund-connect:orders:write
+- path: /orders
+  method: get
+  operationId: listOrders
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - fund-connect:baskets:read
+    - fund-connect:orders:read
+    - fund-connect:orders:write
+- path: /orders/{orderId}
+  method: get
+  operationId: getOrder
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - fund-connect:baskets:read
+    - fund-connect:orders:read
+    - fund-connect:orders:write
+- path: /orders/{orderId}/cancel
+  method: post
+  operationId: cancelOrder
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+    scope:
+    - fund-connect:baskets:read
+    - fund-connect:orders:read
+    - fund-connect:orders:write
