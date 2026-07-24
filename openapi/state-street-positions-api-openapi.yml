@@ -1,0 +1,209 @@
+openapi: 3.0.3
+info:
+  title: State Street Alpha Data Platform Baskets Positions API
+  description: The State Street Alpha Data Platform API provides institutional investment managers, asset owners, and wealth managers with programmatic access to their portfolio data across the front-to-back Alpha investment management platform. The API enables clients to retrieve portfolio positions, holdings, investable cash, pledged collateral, securities on loan, risk exposures, performance measurement, and transaction history in near real-time. Built on Snowflake and Microsoft Azure, the Alpha Data Platform provides intraday visibility across geographies, asset classes, and counterparties. Authentication uses OAuth 2.0 Client Credentials (RFC 6749 Section 4.4.2). All requests require the X-Correlation-ID header for request tracing. The API follows REST conventions with JSON as the default data format, versioned using Major.Minor.Patch semantics.
+  version: 1.0.0
+  contact:
+    name: State Street API Support
+    email: api-support@statestreet.com
+    url: https://developer.statestreet.com
+  termsOfService: https://www.statestreet.com/us/en/individual-investor/tools-and-resources/terms-and-conditions
+  license:
+    name: Proprietary
+    url: https://developer.statestreet.com/api-platform-standards
+servers:
+- url: https://api.statestreet.com/v1
+  description: State Street API Production
+security:
+- OAuth2:
+  - portfolio:read
+  - positions:read
+  - transactions:read
+  - performance:read
+  - risk:read
+tags:
+- name: Positions
+  description: Portfolio position and holdings operations
+paths:
+  /portfolios/{portfolioId}/positions:
+    get:
+      operationId: listPortfolioPositions
+      summary: List Portfolio Positions
+      description: Retrieve current positions for a portfolio as of the specified date or in near real-time intraday. Returns security identifiers, quantities, market values, cost basis, unrealized gain/loss, and accrued income for each position.
+      tags:
+      - Positions
+      parameters:
+      - name: portfolioId
+        in: path
+        description: Unique portfolio identifier
+        required: true
+        schema:
+          type: string
+          example: PORT-12345
+      - name: asOfDate
+        in: query
+        description: As-of date for positions (defaults to latest available)
+        required: false
+        schema:
+          type: string
+          format: date
+          example: '2026-05-01'
+      - name: assetClass
+        in: query
+        description: Filter by asset class
+        required: false
+        schema:
+          type: string
+          enum:
+          - EQUITY
+          - FIXED_INCOME
+          - CASH
+          - DERIVATIVES
+          - ALTERNATIVES
+          - REAL_ESTATE
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 100
+      - name: pageToken
+        in: query
+        required: false
+        schema:
+          type: string
+      - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: Portfolio positions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PositionListResponse'
+        '404':
+          description: Portfolio not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      description: Error response
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: UNAUTHORIZED
+        message:
+          type: string
+          description: Human-readable error message
+          example: Access token is missing or invalid.
+        correlationId:
+          type: string
+          description: Request correlation ID for support reference
+          format: uuid
+    PositionListResponse:
+      type: object
+      description: Paginated list of portfolio positions
+      properties:
+        portfolioId:
+          type: string
+          example: PORT-12345
+        asOfDate:
+          type: string
+          format: date
+          description: As-of date for the positions
+        positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Position'
+        nextPageToken:
+          type: string
+        totalCount:
+          type: integer
+    Position:
+      type: object
+      description: A single portfolio position
+      properties:
+        securityId:
+          type: string
+          description: Unique security identifier
+          example: US0378331005
+        securityIdType:
+          type: string
+          description: Security identifier type
+          enum:
+          - ISIN
+          - CUSIP
+          - SEDOL
+          - TICKER
+          example: ISIN
+        securityName:
+          type: string
+          description: Security name
+          example: Apple Inc
+        assetClass:
+          type: string
+          description: Asset class classification
+          example: EQUITY
+        quantity:
+          type: number
+          format: double
+          description: Number of shares or units held
+          example: 15000
+        marketValue:
+          type: number
+          format: double
+          description: Current market value in base currency
+          example: 3225000.0
+        price:
+          type: number
+          format: double
+          description: Current price per unit
+          example: 215.0
+        currency:
+          type: string
+          description: Security local currency
+          example: USD
+        costBasis:
+          type: number
+          format: double
+          description: Total cost basis
+          example: 2700000.0
+        unrealizedGainLoss:
+          type: number
+          format: double
+          description: Unrealized gain or loss
+          example: 525000.0
+        weight:
+          type: number
+          format: double
+          description: Portfolio weight as a decimal
+          example: 0.0258
+  parameters:
+    XCorrelationId:
+      name: X-Correlation-ID
+      in: header
+      description: Client-provided correlation ID for request tracing
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: 550e8400-e29b-41d4-a716-446655440000
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth 2.0 Client Credentials flow per RFC 6749 Section 4.4.2. Requires multifactor authentication for all user access.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.statestreet.com/oauth/token
+          scopes:
+            portfolio:read: Read portfolio metadata and account information
+            positions:read: Read portfolio positions and holdings
+            transactions:read: Read transaction history
+            performance:read: Read performance measurement and attribution data
+            risk:read: Read risk analytics and exposure data

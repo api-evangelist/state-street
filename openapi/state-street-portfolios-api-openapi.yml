@@ -1,0 +1,217 @@
+openapi: 3.0.3
+info:
+  title: State Street Alpha Data Platform Baskets Portfolios API
+  description: The State Street Alpha Data Platform API provides institutional investment managers, asset owners, and wealth managers with programmatic access to their portfolio data across the front-to-back Alpha investment management platform. The API enables clients to retrieve portfolio positions, holdings, investable cash, pledged collateral, securities on loan, risk exposures, performance measurement, and transaction history in near real-time. Built on Snowflake and Microsoft Azure, the Alpha Data Platform provides intraday visibility across geographies, asset classes, and counterparties. Authentication uses OAuth 2.0 Client Credentials (RFC 6749 Section 4.4.2). All requests require the X-Correlation-ID header for request tracing. The API follows REST conventions with JSON as the default data format, versioned using Major.Minor.Patch semantics.
+  version: 1.0.0
+  contact:
+    name: State Street API Support
+    email: api-support@statestreet.com
+    url: https://developer.statestreet.com
+  termsOfService: https://www.statestreet.com/us/en/individual-investor/tools-and-resources/terms-and-conditions
+  license:
+    name: Proprietary
+    url: https://developer.statestreet.com/api-platform-standards
+servers:
+- url: https://api.statestreet.com/v1
+  description: State Street API Production
+security:
+- OAuth2:
+  - portfolio:read
+  - positions:read
+  - transactions:read
+  - performance:read
+  - risk:read
+tags:
+- name: Portfolios
+  description: Portfolio and account management operations
+paths:
+  /portfolios:
+    get:
+      operationId: listPortfolios
+      summary: List Portfolios
+      description: Retrieve a list of portfolios accessible to the authenticated client application. Returns portfolio identifiers, names, types, base currencies, and inception dates. Supports pagination for large portfolio sets.
+      tags:
+      - Portfolios
+      parameters:
+      - name: pageSize
+        in: query
+        description: Number of portfolios per page (max 100)
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 25
+      - name: pageToken
+        in: query
+        description: Pagination token from previous response
+        required: false
+        schema:
+          type: string
+      - name: portfolioType
+        in: query
+        description: Filter by portfolio type
+        required: false
+        schema:
+          type: string
+          enum:
+          - MUTUAL_FUND
+          - PENSION
+          - INSURANCE
+          - ENDOWMENT
+          - ALTERNATIVES
+          - ETF
+          - SEPARATE_ACCOUNT
+      - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: List of portfolios
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortfolioListResponse'
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient scope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Rate limit exceeded
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+              description: Seconds to wait before retrying
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /portfolios/{portfolioId}:
+    get:
+      operationId: getPortfolio
+      summary: Get Portfolio
+      description: Retrieve detailed information for a specific portfolio including its current market value, base currency, inception date, benchmark assignment, and portfolio manager details.
+      tags:
+      - Portfolios
+      parameters:
+      - name: portfolioId
+        in: path
+        description: Unique portfolio identifier
+        required: true
+        schema:
+          type: string
+          example: PORT-12345
+      - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: Portfolio details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+        '404':
+          description: Portfolio not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    PortfolioListResponse:
+      type: object
+      description: Paginated list of portfolios
+      properties:
+        portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Portfolio'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results
+        totalCount:
+          type: integer
+          description: Total number of portfolios accessible
+    Portfolio:
+      type: object
+      description: A State Street Alpha portfolio
+      properties:
+        portfolioId:
+          type: string
+          description: Unique portfolio identifier
+          example: PORT-12345
+        portfolioName:
+          type: string
+          description: Human-readable portfolio name
+          example: US Large Cap Core Equity
+        portfolioType:
+          type: string
+          description: Type of portfolio
+          example: MUTUAL_FUND
+        baseCurrency:
+          type: string
+          description: ISO 4217 currency code for the portfolio base currency
+          example: USD
+        inceptionDate:
+          type: string
+          format: date
+          description: Portfolio inception date
+          example: '2010-01-15'
+        totalMarketValue:
+          type: number
+          format: double
+          description: Current total market value in base currency
+          example: 1250000000.0
+        benchmarkId:
+          type: string
+          description: Benchmark identifier assigned to the portfolio
+          example: SP500
+        custodian:
+          type: string
+          description: Custodian holding the assets
+          example: State Street Bank
+    Error:
+      type: object
+      description: Error response
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: UNAUTHORIZED
+        message:
+          type: string
+          description: Human-readable error message
+          example: Access token is missing or invalid.
+        correlationId:
+          type: string
+          description: Request correlation ID for support reference
+          format: uuid
+  parameters:
+    XCorrelationId:
+      name: X-Correlation-ID
+      in: header
+      description: Client-provided correlation ID for request tracing
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: 550e8400-e29b-41d4-a716-446655440000
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth 2.0 Client Credentials flow per RFC 6749 Section 4.4.2. Requires multifactor authentication for all user access.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.statestreet.com/oauth/token
+          scopes:
+            portfolio:read: Read portfolio metadata and account information
+            positions:read: Read portfolio positions and holdings
+            transactions:read: Read transaction history
+            performance:read: Read performance measurement and attribution data
+            risk:read: Read risk analytics and exposure data

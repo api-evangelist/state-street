@@ -1,0 +1,217 @@
+openapi: 3.0.3
+info:
+  title: State Street Alpha Data Platform Baskets Transactions API
+  description: The State Street Alpha Data Platform API provides institutional investment managers, asset owners, and wealth managers with programmatic access to their portfolio data across the front-to-back Alpha investment management platform. The API enables clients to retrieve portfolio positions, holdings, investable cash, pledged collateral, securities on loan, risk exposures, performance measurement, and transaction history in near real-time. Built on Snowflake and Microsoft Azure, the Alpha Data Platform provides intraday visibility across geographies, asset classes, and counterparties. Authentication uses OAuth 2.0 Client Credentials (RFC 6749 Section 4.4.2). All requests require the X-Correlation-ID header for request tracing. The API follows REST conventions with JSON as the default data format, versioned using Major.Minor.Patch semantics.
+  version: 1.0.0
+  contact:
+    name: State Street API Support
+    email: api-support@statestreet.com
+    url: https://developer.statestreet.com
+  termsOfService: https://www.statestreet.com/us/en/individual-investor/tools-and-resources/terms-and-conditions
+  license:
+    name: Proprietary
+    url: https://developer.statestreet.com/api-platform-standards
+servers:
+- url: https://api.statestreet.com/v1
+  description: State Street API Production
+security:
+- OAuth2:
+  - portfolio:read
+  - positions:read
+  - transactions:read
+  - performance:read
+  - risk:read
+tags:
+- name: Transactions
+  description: Transaction history and settlement operations
+paths:
+  /portfolios/{portfolioId}/transactions:
+    get:
+      operationId: listPortfolioTransactions
+      summary: List Portfolio Transactions
+      description: Retrieve transaction history for a portfolio over a specified date range. Returns trade details, corporate actions, cash movements, income events, and settlement status. Supports filtering by transaction type and date range.
+      tags:
+      - Transactions
+      parameters:
+      - name: portfolioId
+        in: path
+        description: Unique portfolio identifier
+        required: true
+        schema:
+          type: string
+          example: PORT-12345
+      - name: startDate
+        in: query
+        description: Start date for transaction history
+        required: true
+        schema:
+          type: string
+          format: date
+          example: '2026-04-01'
+      - name: endDate
+        in: query
+        description: End date for transaction history
+        required: true
+        schema:
+          type: string
+          format: date
+          example: '2026-04-30'
+      - name: transactionType
+        in: query
+        description: Filter by transaction type
+        required: false
+        schema:
+          type: string
+          enum:
+          - TRADE
+          - CORPORATE_ACTION
+          - CASH
+          - INCOME
+          - TRANSFER
+          - FEE
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 100
+      - name: pageToken
+        in: query
+        required: false
+        schema:
+          type: string
+      - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: Portfolio transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionListResponse'
+        '404':
+          description: Portfolio not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Transaction:
+      type: object
+      description: A portfolio transaction
+      properties:
+        transactionId:
+          type: string
+          description: Unique transaction identifier
+          example: TXN-20260415-78901
+        transactionType:
+          type: string
+          description: Transaction type
+          example: TRADE
+        tradeDate:
+          type: string
+          format: date
+          description: Trade execution date
+          example: '2026-04-15'
+        settlementDate:
+          type: string
+          format: date
+          description: Expected or actual settlement date
+          example: '2026-04-17'
+        settlementStatus:
+          type: string
+          description: Settlement status
+          enum:
+          - PENDING
+          - SETTLED
+          - FAILED
+          example: SETTLED
+        securityId:
+          type: string
+          description: Security identifier
+          example: US0378331005
+        securityName:
+          type: string
+          description: Security name
+          example: Apple Inc
+        quantity:
+          type: number
+          format: double
+          description: Transaction quantity (positive for buy, negative for sell)
+          example: 500
+        price:
+          type: number
+          format: double
+          description: Transaction price per unit
+          example: 213.5
+        netAmount:
+          type: number
+          format: double
+          description: Net transaction amount after commissions and fees
+          example: 106750.0
+        currency:
+          type: string
+          description: Transaction currency
+          example: USD
+    Error:
+      type: object
+      description: Error response
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: UNAUTHORIZED
+        message:
+          type: string
+          description: Human-readable error message
+          example: Access token is missing or invalid.
+        correlationId:
+          type: string
+          description: Request correlation ID for support reference
+          format: uuid
+    TransactionListResponse:
+      type: object
+      description: Paginated list of transactions
+      properties:
+        portfolioId:
+          type: string
+          example: PORT-12345
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        nextPageToken:
+          type: string
+        totalCount:
+          type: integer
+  parameters:
+    XCorrelationId:
+      name: X-Correlation-ID
+      in: header
+      description: Client-provided correlation ID for request tracing
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: 550e8400-e29b-41d4-a716-446655440000
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth 2.0 Client Credentials flow per RFC 6749 Section 4.4.2. Requires multifactor authentication for all user access.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.statestreet.com/oauth/token
+          scopes:
+            portfolio:read: Read portfolio metadata and account information
+            positions:read: Read portfolio positions and holdings
+            transactions:read: Read transaction history
+            performance:read: Read performance measurement and attribution data
+            risk:read: Read risk analytics and exposure data

@@ -1,0 +1,138 @@
+openapi: 3.0.3
+info:
+  title: State Street Alpha Data Platform Baskets API
+  description: The State Street Alpha Data Platform API provides institutional investment managers, asset owners, and wealth managers with programmatic access to their portfolio data across the front-to-back Alpha investment management platform. The API enables clients to retrieve portfolio positions, holdings, investable cash, pledged collateral, securities on loan, risk exposures, performance measurement, and transaction history in near real-time. Built on Snowflake and Microsoft Azure, the Alpha Data Platform provides intraday visibility across geographies, asset classes, and counterparties. Authentication uses OAuth 2.0 Client Credentials (RFC 6749 Section 4.4.2). All requests require the X-Correlation-ID header for request tracing. The API follows REST conventions with JSON as the default data format, versioned using Major.Minor.Patch semantics.
+  version: 1.0.0
+  contact:
+    name: State Street API Support
+    email: api-support@statestreet.com
+    url: https://developer.statestreet.com
+  termsOfService: https://www.statestreet.com/us/en/individual-investor/tools-and-resources/terms-and-conditions
+  license:
+    name: Proprietary
+    url: https://developer.statestreet.com/api-platform-standards
+servers:
+- url: https://api.statestreet.com/v1
+  description: State Street API Production
+security:
+- OAuth2:
+  - portfolio:read
+  - positions:read
+  - transactions:read
+  - performance:read
+  - risk:read
+tags:
+- name: Baskets
+  description: ETF portfolio composition basket operations
+paths:
+  /funds/{fundId}/baskets:
+    get:
+      operationId: getFundBasket
+      summary: Get ETF Portfolio Basket
+      description: Retrieve the current portfolio composition basket for an ETF fund. Returns the in-kind securities list with required quantities for creation/redemption units, as well as any cash component. Baskets are published daily prior to market open.
+      tags:
+      - Baskets
+      parameters:
+      - name: fundId
+        in: path
+        description: Unique fund identifier
+        required: true
+        schema:
+          type: string
+          example: ETF-SPDR-SPY
+      - name: date
+        in: query
+        description: Date for which to retrieve the basket composition
+        required: false
+        schema:
+          type: string
+          format: date
+          example: '2026-05-02'
+      - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: ETF portfolio basket composition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasketResponse'
+        '404':
+          description: Fund or basket not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: UNAUTHORIZED
+        message:
+          type: string
+          example: Access token is missing or invalid.
+        correlationId:
+          type: string
+          format: uuid
+    BasketResponse:
+      type: object
+      description: ETF portfolio basket composition
+      properties:
+        fundId:
+          type: string
+          example: ETF-SPDR-SPY
+        date:
+          type: string
+          format: date
+        cashComponent:
+          type: number
+          format: double
+          description: Cash component per creation unit in base currency
+          example: 1250.5
+        securities:
+          type: array
+          description: In-kind securities required per creation/redemption unit
+          items:
+            type: object
+            properties:
+              securityId:
+                type: string
+                example: US0378331005
+              securityIdType:
+                type: string
+                example: ISIN
+              securityName:
+                type: string
+                example: Apple Inc
+              ticker:
+                type: string
+                example: AAPL
+              quantity:
+                type: number
+                format: double
+                description: Shares per creation unit
+                example: 1250
+  parameters:
+    XCorrelationId:
+      name: X-Correlation-ID
+      in: header
+      description: Client-provided correlation ID for request tracing
+      required: false
+      schema:
+        type: string
+        format: uuid
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth 2.0 Client Credentials flow per RFC 6749 Section 4.4.2. Requires multifactor authentication for all user access.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.statestreet.com/oauth/token
+          scopes:
+            portfolio:read: Read portfolio metadata and account information
+            positions:read: Read portfolio positions and holdings
+            transactions:read: Read transaction history
+            performance:read: Read performance measurement and attribution data
+            risk:read: Read risk analytics and exposure data

@@ -1,0 +1,184 @@
+openapi: 3.0.3
+info:
+  title: State Street Alpha Data Platform Baskets Funds API
+  description: The State Street Alpha Data Platform API provides institutional investment managers, asset owners, and wealth managers with programmatic access to their portfolio data across the front-to-back Alpha investment management platform. The API enables clients to retrieve portfolio positions, holdings, investable cash, pledged collateral, securities on loan, risk exposures, performance measurement, and transaction history in near real-time. Built on Snowflake and Microsoft Azure, the Alpha Data Platform provides intraday visibility across geographies, asset classes, and counterparties. Authentication uses OAuth 2.0 Client Credentials (RFC 6749 Section 4.4.2). All requests require the X-Correlation-ID header for request tracing. The API follows REST conventions with JSON as the default data format, versioned using Major.Minor.Patch semantics.
+  version: 1.0.0
+  contact:
+    name: State Street API Support
+    email: api-support@statestreet.com
+    url: https://developer.statestreet.com
+  termsOfService: https://www.statestreet.com/us/en/individual-investor/tools-and-resources/terms-and-conditions
+  license:
+    name: Proprietary
+    url: https://developer.statestreet.com/api-platform-standards
+servers:
+- url: https://api.statestreet.com/v1
+  description: State Street API Production
+security:
+- OAuth2:
+  - portfolio:read
+  - positions:read
+  - transactions:read
+  - performance:read
+  - risk:read
+tags:
+- name: Funds
+  description: ETF fund information operations
+paths:
+  /funds:
+    get:
+      operationId: listFunds
+      summary: List ETF Funds
+      description: Retrieve a list of ETF funds available for creation and redemption through Fund Connect. Returns fund identifiers, names, tickers, base currencies, and authorized participant entitlements.
+      tags:
+      - Funds
+      parameters:
+      - name: market
+        in: query
+        description: Filter by market/exchange
+        required: false
+        schema:
+          type: string
+          example: US
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 25
+          maximum: 100
+      - name: pageToken
+        in: query
+        required: false
+        schema:
+          type: string
+      - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: List of ETF funds
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FundListResponse'
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /funds/{fundId}:
+    get:
+      operationId: getFund
+      summary: Get ETF Fund
+      description: Retrieve detailed information for a specific ETF fund including its composition requirements, minimum creation/redemption unit size, and authorized participant eligibility.
+      tags:
+      - Funds
+      parameters:
+      - name: fundId
+        in: path
+        description: Unique fund identifier
+        required: true
+        schema:
+          type: string
+          example: ETF-SPDR-SPY
+      - $ref: '#/components/parameters/XCorrelationId'
+      responses:
+        '200':
+          description: ETF fund details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fund'
+        '404':
+          description: Fund not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: UNAUTHORIZED
+        message:
+          type: string
+          example: Access token is missing or invalid.
+        correlationId:
+          type: string
+          format: uuid
+    Fund:
+      type: object
+      description: An ETF fund available on Fund Connect
+      properties:
+        fundId:
+          type: string
+          description: Unique fund identifier
+          example: ETF-SPDR-SPY
+        fundName:
+          type: string
+          description: Full fund name
+          example: SPDR S&P 500 ETF Trust
+        ticker:
+          type: string
+          description: Exchange ticker symbol
+          example: SPY
+        isin:
+          type: string
+          description: ISIN code
+          example: US78462F1030
+        baseCurrency:
+          type: string
+          description: Fund base currency
+          example: USD
+        exchange:
+          type: string
+          description: Primary exchange
+          example: NYSE Arca
+        creationUnit:
+          type: integer
+          description: Number of shares per creation/redemption unit
+          example: 50000
+        fundManager:
+          type: string
+          description: Fund manager/sponsor name
+          example: State Street Global Advisors
+        custodian:
+          type: string
+          description: Fund custodian
+          example: State Street Bank
+    FundListResponse:
+      type: object
+      properties:
+        funds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fund'
+        nextPageToken:
+          type: string
+        totalCount:
+          type: integer
+  parameters:
+    XCorrelationId:
+      name: X-Correlation-ID
+      in: header
+      description: Client-provided correlation ID for request tracing
+      required: false
+      schema:
+        type: string
+        format: uuid
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth 2.0 Client Credentials flow per RFC 6749 Section 4.4.2. Requires multifactor authentication for all user access.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.statestreet.com/oauth/token
+          scopes:
+            portfolio:read: Read portfolio metadata and account information
+            positions:read: Read portfolio positions and holdings
+            transactions:read: Read transaction history
+            performance:read: Read performance measurement and attribution data
+            risk:read: Read risk analytics and exposure data
