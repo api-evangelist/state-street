@@ -1,4 +1,18 @@
 aid: state-street
+accessModel:
+  pricing: enterprise
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Enterprise · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/state-street.png
 tags:
   - Fortune 500
 url: https://raw.githubusercontent.com/api-evangelist/state-street/refs/heads/main/apis.yml
@@ -17,102 +31,173 @@ description: >-
   ETF order management. APIs follow REST conventions with OpenAPI 3.0 specifications, JSON data format, and JSON Schema
   documentation.
 apis:
-  - aid: state-street:alpha-data-platform-api
-    name: Alpha Data Platform API
-    description: >-
-      The State Street Alpha Data Platform API provides institutional investment managers with programmatic access to
-      the front-to-back Alpha investment management platform. Clients can retrieve portfolio holdings, positions,
-      investable cash, pledged collateral, securities on loan, risk exposures, performance measurement, and transaction
-      history in near real-time. Built on Snowflake and Microsoft Azure, the Alpha Data Platform enables intraday
-      visibility across geographies, asset classes, and counterparties. Authentication uses OAuth 2.0 Client
-      Credentials.
-    humanURL: https://developer.statestreet.com/api-overview
-    baseURL: https://api.statestreet.com/v1
-    tags:
-      - Financial Services
-      - Investment Management
-      - Portfolio
-      - Data Platform
-      - Institutional
-    properties:
-      - type: Documentation
-        url: https://developer.statestreet.com/documentation-usage
-      - type: OpenAPI
-        url: openapi/state-street-alpha-data-platform-openapi.yml
-  - aid: state-street:fund-connect-api
-    name: Fund Connect API
-    description: >-
-      The State Street Fund Connect API enables authorized participants (APs), fund managers, and custodians to
-      programmatically manage ETF creation and redemption orders through the Fund Connect platform. The API supports FIX
-      protocol and XML for order submission, and has executed the first API-based ETF order in Australian-domiciled ETFs
-      (2025). Fund Connect is a global online portal processing ETF transactions across major markets.
-    humanURL: https://developer.statestreet.com/
-    baseURL: https://api.statestreet.com/v1/fund-connect
-    tags:
-      - Financial Services
-      - ETF
-      - Fund Management
-      - Order Management
-      - Institutional
-    properties:
-      - type: Documentation
-        url: https://developer.statestreet.com/
-      - type: OpenAPI
-        url: openapi/state-street-fund-connect-openapi.yml
-  - aid: state-street:investment-accounting-api
-    name: Investment Accounting API
-    description: >-
-      The State Street Investment Accounting API provides institutional clients with access to portfolio accounting data
-      including net asset value (NAV) calculations, position valuations, corporate actions processing, performance
-      measurement, and attribution analysis. State Street services over 70 types of portfolios including mutual funds,
-      insurance portfolios, alternatives, and pension funds.
-    humanURL: https://www.statestreet.com/us/en/solutions/investment-accounting
-    baseURL: https://api.statestreet.com/v1/accounting
-    tags:
-      - Financial Services
-      - Accounting
-      - NAV
-      - Performance
-      - Institutional
-    properties:
-      - type: Documentation
-        url: https://developer.statestreet.com/documentation-usage
-  - aid: state-street:performance-analytics-api
-    name: Performance Analytics API
-    description: >-
-      The State Street Performance Analytics API (TrueView) provides institutional investors and asset managers with
-      access to investment risk analytics, performance attribution, scenario analysis, and reporting. Enables portfolio
-      managers to access benchmark-relative attribution, risk factor decomposition, and regulatory reporting data across
-      all asset classes including fixed income, equities, derivatives, and alternatives.
-    humanURL: https://www.statestreet.com/us/en/asset-owner/solutions/performance-and-analytics
-    baseURL: https://api.statestreet.com/v1/analytics
-    tags:
-      - Financial Services
-      - Analytics
-      - Performance
-      - Risk
-      - Institutional
-    properties:
-      - type: Documentation
-        url: https://developer.statestreet.com/documentation-usage
-  - aid: state-street:sample-transactions-api
-    name: Sample Transactions API
-    description: >-
-      The State Street Sample Transactions API is a reference and onboarding API provided in the developer portal to
-      help new integration teams understand the authentication flow, request structure, and response format of State
-      Street's API platform. Developers use this API to perform an initial successful API call and retrieve a sample
-      dataset before progressing to production APIs.
-    humanURL: https://developer.statestreet.com/get-started-browser
-    baseURL: https://api.statestreet.com/v1
-    tags:
-      - Financial Services
-      - Developer
-      - Reference
-      - Onboarding
-      - Sample
-    properties:
-      - type: Documentation
-        url: https://developer.statestreet.com/get-started-browser
+- aid: state-street:investment-accounting-api
+  name: Investment Accounting API
+  description: >-
+    The State Street Investment Accounting API provides institutional clients with access to portfolio
+    accounting data including net asset value (NAV) calculations, position valuations, corporate actions
+    processing, performance measurement, and attribution analysis. State Street services over 70 types
+    of portfolios including mutual funds, insurance portfolios, alternatives, and pension funds.
+  humanURL: https://www.statestreet.com/us/en/solutions/investment-accounting
+  baseURL: https://api.statestreet.com/v1/accounting
+  tags:
+  - Financial Services
+  - Accounting
+  - NAV
+  - Performance
+  - Institutional
+  properties:
+  - type: Documentation
+    url: https://developer.statestreet.com/documentation-usage
+- aid: state-street:performance-analytics-api
+  name: Performance Analytics API
+  description: >-
+    The State Street Performance Analytics API (TrueView) provides institutional investors and asset managers
+    with access to investment risk analytics, performance attribution, scenario analysis, and reporting.
+    Enables portfolio managers to access benchmark-relative attribution, risk factor decomposition, and
+    regulatory reporting data across all asset classes including fixed income, equities, derivatives,
+    and alternatives.
+  humanURL: https://www.statestreet.com/us/en/asset-owner/solutions/performance-and-analytics
+  baseURL: https://api.statestreet.com/v1/analytics
+  tags:
+  - Financial Services
+  - Analytics
+  - Performance
+  - Risk
+  - Institutional
+  properties:
+  - type: Documentation
+    url: https://developer.statestreet.com/documentation-usage
+- aid: state-street:sample-transactions-api
+  name: Sample Transactions API
+  description: >-
+    The State Street Sample Transactions API is a reference and onboarding API provided in the developer
+    portal to help new integration teams understand the authentication flow, request structure, and response
+    format of State Street's API platform. Developers use this API to perform an initial successful API
+    call and retrieve a sample dataset before progressing to production APIs.
+  humanURL: https://developer.statestreet.com/get-started-browser
+  baseURL: https://api.statestreet.com/v1
+  tags:
+  - Financial Services
+  - Developer
+  - Reference
+  - Onboarding
+  - Sample
+  properties:
+  - type: Documentation
+    url: https://developer.statestreet.com/get-started-browser
+- aid: state-street:state-street-baskets-api
+  name: State Street Baskets API
+  description: ETF portfolio composition basket operations
+  humanURL: https://developer.statestreet.com/api-overview
+  baseURL: https://api.statestreet.com/v1
+  tags:
+  - Baskets
+  properties:
+  - type: OpenAPI
+    url: openapi/state-street-baskets-api-openapi.yml
+  - type: Documentation
+    url: https://developer.statestreet.com/documentation-usage
+  - type: Documentation
+    url: https://developer.statestreet.com/
+- aid: state-street:state-street-funds-api
+  name: State Street Funds API
+  description: ETF fund information operations
+  humanURL: https://developer.statestreet.com/api-overview
+  baseURL: https://api.statestreet.com/v1
+  tags:
+  - Funds
+  properties:
+  - type: OpenAPI
+    url: openapi/state-street-funds-api-openapi.yml
+  - type: Documentation
+    url: https://developer.statestreet.com/documentation-usage
+  - type: Documentation
+    url: https://developer.statestreet.com/
+- aid: state-street:state-street-orders-api
+  name: State Street Orders API
+  description: ETF creation and redemption order operations
+  humanURL: https://developer.statestreet.com/api-overview
+  baseURL: https://api.statestreet.com/v1
+  tags:
+  - Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/state-street-orders-api-openapi.yml
+  - type: Documentation
+    url: https://developer.statestreet.com/documentation-usage
+  - type: Documentation
+    url: https://developer.statestreet.com/
+- aid: state-street:state-street-performance-api
+  name: State Street Performance API
+  description: Performance measurement and attribution operations
+  humanURL: https://developer.statestreet.com/api-overview
+  baseURL: https://api.statestreet.com/v1
+  tags:
+  - Performance
+  properties:
+  - type: OpenAPI
+    url: openapi/state-street-performance-api-openapi.yml
+  - type: Documentation
+    url: https://developer.statestreet.com/documentation-usage
+  - type: Documentation
+    url: https://developer.statestreet.com/
+- aid: state-street:state-street-portfolios-api
+  name: State Street Portfolios API
+  description: Portfolio and account management operations
+  humanURL: https://developer.statestreet.com/api-overview
+  baseURL: https://api.statestreet.com/v1
+  tags:
+  - Portfolios
+  properties:
+  - type: OpenAPI
+    url: openapi/state-street-portfolios-api-openapi.yml
+  - type: Documentation
+    url: https://developer.statestreet.com/documentation-usage
+  - type: Documentation
+    url: https://developer.statestreet.com/
+- aid: state-street:state-street-positions-api
+  name: State Street Positions API
+  description: Portfolio position and holdings operations
+  humanURL: https://developer.statestreet.com/api-overview
+  baseURL: https://api.statestreet.com/v1
+  tags:
+  - Positions
+  properties:
+  - type: OpenAPI
+    url: openapi/state-street-positions-api-openapi.yml
+  - type: Documentation
+    url: https://developer.statestreet.com/documentation-usage
+  - type: Documentation
+    url: https://developer.statestreet.com/
+- aid: state-street:state-street-risk-api
+  name: State Street Risk API
+  description: Risk analytics and exposure operations
+  humanURL: https://developer.statestreet.com/api-overview
+  baseURL: https://api.statestreet.com/v1
+  tags:
+  - Risk
+  properties:
+  - type: OpenAPI
+    url: openapi/state-street-risk-api-openapi.yml
+  - type: Documentation
+    url: https://developer.statestreet.com/documentation-usage
+  - type: Documentation
+    url: https://developer.statestreet.com/
+- aid: state-street:state-street-transactions-api
+  name: State Street Transactions API
+  description: Transaction history and settlement operations
+  humanURL: https://developer.statestreet.com/api-overview
+  baseURL: https://api.statestreet.com/v1
+  tags:
+  - Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/state-street-transactions-api-openapi.yml
+  - type: Documentation
+    url: https://developer.statestreet.com/documentation-usage
+  - type: Documentation
+    url: https://developer.statestreet.com/
 common:
   - type: AgenticAccess
     url: agentic-access/state-street-agentic-access.yml
