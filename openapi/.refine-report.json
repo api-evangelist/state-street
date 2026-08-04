@@ -1,0 +1,28 @@
+{
+  "provider": "state-street",
+  "sources": [
+    "state-street-baskets-api-openapi.yml",
+    "state-street-funds-api-openapi.yml",
+    "state-street-orders-api-openapi.yml",
+    "state-street-performance-api-openapi.yml",
+    "state-street-portfolios-api-openapi.yml",
+    "state-street-positions-api-openapi.yml",
+    "state-street-risk-api-openapi.yml",
+    "state-street-transactions-api-openapi.yml"
+  ],
+  "outputs": [
+    "state-street-baskets-api-openapi.yml",
+    "state-street-funds-api-openapi.yml",
+    "state-street-orders-api-openapi.yml",
+    "state-street-performance-api-openapi.yml",
+    "state-street-portfolios-api-openapi.yml",
+    "state-street-positions-api-openapi.yml",
+    "state-street-risk-api-openapi.yml",
+    "state-street-transactions-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
