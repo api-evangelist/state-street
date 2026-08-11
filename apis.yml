@@ -199,6 +199,8 @@ apis:
   - type: Documentation
     url: https://developer.statestreet.com/
 common:
+  - type: Blog
+    url: https://www.statestreet.com/content/statestreet/us/en/insights
   - type: AgenticAccess
     url: agentic-access/state-street-agentic-access.yml
   - type: DomainSecurity
@@ -236,9 +238,9 @@ common:
   - type: TermsOfService
     url: https://www.statestreet.com/us/en/individual-investor/tools-and-resources/terms-and-conditions
   - type: OpenAPI
-    url: openapi/state-street-alpha-data-platform-openapi.yml
+    url: openapi/_original/state-street-alpha-data-platform-openapi.yml
   - type: OpenAPI
-    url: openapi/state-street-fund-connect-openapi.yml
+    url: openapi/_original/state-street-fund-connect-openapi.yml
   - type: JSONSchema
     url: json-schema/state-street-portfolio-schema.json
   - type: JSONSchema
