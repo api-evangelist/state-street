@@ -1,0 +1,235 @@
+{
+  "item": [
+    {
+      "id": "ed6df83c-da93-4afc-8ee4-27bf34683cba",
+      "name": "Baskets",
+      "description": {
+        "content": "ETF portfolio composition basket operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9a61fe2d-1245-4713-87dd-e4c67950691d",
+          "name": "Get ETF Portfolio Basket",
+          "request": {
+            "name": "Get ETF Portfolio Basket",
+            "description": {
+              "content": "Retrieve the current portfolio composition basket for an ETF fund. Returns the in-kind securities list with required quantities for creation/redemption units, as well as any cash component. Baskets are published daily prior to market open.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "funds",
+                ":fundId",
+                "baskets"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "<date>",
+                  "description": "Date for which to retrieve the basket composition"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "fundId",
+                  "description": "(Required) Unique fund identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Client-provided correlation ID for request tracing",
+                "key": "X-Correlation-ID",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "482d7524-796e-4cfc-a432-54c48ea7c412",
+              "name": "ETF portfolio basket composition",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "funds",
+                    ":fundId",
+                    "baskets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "2026-05-02"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fundId",
+                      "description": "(Required) Unique fund identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"fundId\": \"ETF-SPDR-SPY\",\n  \"date\": \"1970-12-07\",\n  \"cashComponent\": 1250.5,\n  \"securities\": [\n    {\n      \"securityId\": \"US0378331005\",\n      \"securityIdType\": \"ISIN\",\n      \"securityName\": \"Apple Inc\",\n      \"ticker\": \"AAPL\",\n      \"quantity\": 1250\n    },\n    {\n      \"securityId\": \"US0378331005\",\n      \"securityIdType\": \"ISIN\",\n      \"securityName\": \"Apple Inc\",\n      \"ticker\": \"AAPL\",\n      \"quantity\": 1250\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1a901a11-20f0-4124-b00c-f14c571036b0",
+              "name": "Fund or basket not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "funds",
+                    ":fundId",
+                    "baskets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "2026-05-02"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fundId",
+                      "description": "(Required) Unique fund identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"UNAUTHORIZED\",\n  \"message\": \"Access token is missing or invalid.\",\n  \"correlationId\": \"e6b0125b-a7c0-a9a8-2d78-a112670827d1\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.statestreet.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "portfolio:read positions:read transactions:read performance:read risk:read"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.statestreet.com/oauth/token"
+      },
+      {
+        "key": "grant_type",
+        "value": "client_credentials"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e69beae0-72dd-4da1-91e0-b556a443b64f",
+    "name": "State Street Alpha Data Platform Baskets API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The State Street Alpha Data Platform API provides institutional investment managers, asset owners, and wealth managers with programmatic access to their portfolio data across the front-to-back Alpha investment management platform. The API enables clients to retrieve portfolio positions, holdings, investable cash, pledged collateral, securities on loan, risk exposures, performance measurement, and transaction history in near real-time. Built on Snowflake and Microsoft Azure, the Alpha Data Platform provides intraday visibility across geographies, asset classes, and counterparties. Authentication uses OAuth 2.0 Client Credentials (RFC 6749 Section 4.4.2). All requests require the X-Correlation-ID header for request tracing. The API follows REST conventions with JSON as the default data format, versioned using Major.Minor.Patch semantics.\n\nContact Support:\n Name: State Street API Support\n Email: api-support@statestreet.com",
+      "type": "text/plain"
+    }
+  }
+}

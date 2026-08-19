@@ -1,0 +1,289 @@
+{
+  "item": [
+    {
+      "id": "88fbaa79-637a-475c-a47a-e303416bdb6f",
+      "name": "Transactions",
+      "description": {
+        "content": "Transaction history and settlement operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a48174f6-55e8-4891-802a-abe33769166e",
+          "name": "List Portfolio Transactions",
+          "request": {
+            "name": "List Portfolio Transactions",
+            "description": {
+              "content": "Retrieve transaction history for a portfolio over a specified date range. Returns trade details, corporate actions, cash movements, income events, and settlement status. Supports filtering by transaction type and date range.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "portfolios",
+                ":portfolioId",
+                "transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "startDate",
+                  "value": "<date>",
+                  "description": "(Required) Start date for transaction history"
+                },
+                {
+                  "disabled": false,
+                  "key": "endDate",
+                  "value": "<date>",
+                  "description": "(Required) End date for transaction history"
+                },
+                {
+                  "disabled": false,
+                  "key": "transactionType",
+                  "value": "<string>",
+                  "description": "Filter by transaction type"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "100"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "portfolioId",
+                  "description": "(Required) Unique portfolio identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Client-provided correlation ID for request tracing",
+                "key": "X-Correlation-ID",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a45b80f2-7887-4c77-9219-37fbbd976c40",
+              "name": "Portfolio transactions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios",
+                    ":portfolioId",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDate",
+                      "value": "2026-04-01"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2026-04-30"
+                    },
+                    {
+                      "key": "transactionType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "portfolioId",
+                      "description": "(Required) Unique portfolio identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "550e8400-e29b-41d4-a716-446655440000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"portfolioId\": \"PORT-12345\",\n  \"startDate\": \"2012-12-30\",\n  \"endDate\": \"1998-02-20\",\n  \"transactions\": [\n    {\n      \"transactionId\": \"TXN-20260415-78901\",\n      \"transactionType\": \"TRADE\",\n      \"tradeDate\": \"2026-04-15\",\n      \"settlementDate\": \"2026-04-17\",\n      \"settlementStatus\": \"SETTLED\",\n      \"securityId\": \"US0378331005\",\n      \"securityName\": \"Apple Inc\",\n      \"quantity\": 500,\n      \"price\": 213.5,\n      \"netAmount\": 106750,\n      \"currency\": \"USD\"\n    },\n    {\n      \"transactionId\": \"TXN-20260415-78901\",\n      \"transactionType\": \"TRADE\",\n      \"tradeDate\": \"2026-04-15\",\n      \"settlementDate\": \"2026-04-17\",\n      \"settlementStatus\": \"SETTLED\",\n      \"securityId\": \"US0378331005\",\n      \"securityName\": \"Apple Inc\",\n      \"quantity\": 500,\n      \"price\": 213.5,\n      \"netAmount\": 106750,\n      \"currency\": \"USD\"\n    }\n  ],\n  \"nextPageToken\": \"string\",\n  \"totalCount\": 5531\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5750f2f5-1d99-40de-91d9-6d14d9d43938",
+              "name": "Portfolio not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios",
+                    ":portfolioId",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDate",
+                      "value": "2026-04-01"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2026-04-30"
+                    },
+                    {
+                      "key": "transactionType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "portfolioId",
+                      "description": "(Required) Unique portfolio identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "550e8400-e29b-41d4-a716-446655440000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"UNAUTHORIZED\",\n  \"message\": \"Access token is missing or invalid.\",\n  \"correlationId\": \"37535fd3-fd10-d325-9b24-caf6343ec51c\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.statestreet.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "portfolio:read positions:read transactions:read performance:read risk:read"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.statestreet.com/oauth/token"
+      },
+      {
+        "key": "grant_type",
+        "value": "client_credentials"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "79a8f989-8ec2-4592-82ed-b598140ffcb6",
+    "name": "State Street Alpha Data Platform Baskets Transactions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The State Street Alpha Data Platform API provides institutional investment managers, asset owners, and wealth managers with programmatic access to their portfolio data across the front-to-back Alpha investment management platform. The API enables clients to retrieve portfolio positions, holdings, investable cash, pledged collateral, securities on loan, risk exposures, performance measurement, and transaction history in near real-time. Built on Snowflake and Microsoft Azure, the Alpha Data Platform provides intraday visibility across geographies, asset classes, and counterparties. Authentication uses OAuth 2.0 Client Credentials (RFC 6749 Section 4.4.2). All requests require the X-Correlation-ID header for request tracing. The API follows REST conventions with JSON as the default data format, versioned using Major.Minor.Patch semantics.\n\nContact Support:\n Name: State Street API Support\n Email: api-support@statestreet.com",
+      "type": "text/plain"
+    }
+  }
+}

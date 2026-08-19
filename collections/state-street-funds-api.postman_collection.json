@@ -1,0 +1,397 @@
+{
+  "item": [
+    {
+      "id": "e3199ba9-2dd9-4ef7-a4b2-36f42078af4a",
+      "name": "Funds",
+      "description": {
+        "content": "ETF fund information operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f02f37ef-9d19-4d43-9b13-856d6181d9d9",
+          "name": "List ETF Funds",
+          "request": {
+            "name": "List ETF Funds",
+            "description": {
+              "content": "Retrieve a list of ETF funds available for creation and redemption through Fund Connect. Returns fund identifiers, names, tickers, base currencies, and authorized participant entitlements.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "funds"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "market",
+                  "value": "<string>",
+                  "description": "Filter by market/exchange"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "25"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Client-provided correlation ID for request tracing",
+                "key": "X-Correlation-ID",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cb01735b-6b73-400e-9137-30fb32d68841",
+              "name": "List of ETF funds",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "funds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "market",
+                      "value": "US"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"funds\": [\n    {\n      \"fundId\": \"ETF-SPDR-SPY\",\n      \"fundName\": \"SPDR S&P 500 ETF Trust\",\n      \"ticker\": \"SPY\",\n      \"isin\": \"US78462F1030\",\n      \"baseCurrency\": \"USD\",\n      \"exchange\": \"NYSE Arca\",\n      \"creationUnit\": 50000,\n      \"fundManager\": \"State Street Global Advisors\",\n      \"custodian\": \"State Street Bank\"\n    },\n    {\n      \"fundId\": \"ETF-SPDR-SPY\",\n      \"fundName\": \"SPDR S&P 500 ETF Trust\",\n      \"ticker\": \"SPY\",\n      \"isin\": \"US78462F1030\",\n      \"baseCurrency\": \"USD\",\n      \"exchange\": \"NYSE Arca\",\n      \"creationUnit\": 50000,\n      \"fundManager\": \"State Street Global Advisors\",\n      \"custodian\": \"State Street Bank\"\n    }\n  ],\n  \"nextPageToken\": \"string\",\n  \"totalCount\": 9187\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "857bd7af-a8e7-43f4-8c1a-d80488f79d47",
+              "name": "Authentication required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "funds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "market",
+                      "value": "US"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"UNAUTHORIZED\",\n  \"message\": \"Access token is missing or invalid.\",\n  \"correlationId\": \"f194e217-d66e-a288-ee08-b742436ac20c\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ef04015a-975f-417a-8e59-be0158cc25f5",
+          "name": "Get ETF Fund",
+          "request": {
+            "name": "Get ETF Fund",
+            "description": {
+              "content": "Retrieve detailed information for a specific ETF fund including its composition requirements, minimum creation/redemption unit size, and authorized participant eligibility.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "funds",
+                ":fundId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "fundId",
+                  "description": "(Required) Unique fund identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Client-provided correlation ID for request tracing",
+                "key": "X-Correlation-ID",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c2e8d7f0-aa54-474e-a3c9-58e3a8b6a943",
+              "name": "ETF fund details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "funds",
+                    ":fundId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fundId",
+                      "description": "(Required) Unique fund identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"fundId\": \"ETF-SPDR-SPY\",\n  \"fundName\": \"SPDR S&P 500 ETF Trust\",\n  \"ticker\": \"SPY\",\n  \"isin\": \"US78462F1030\",\n  \"baseCurrency\": \"USD\",\n  \"exchange\": \"NYSE Arca\",\n  \"creationUnit\": 50000,\n  \"fundManager\": \"State Street Global Advisors\",\n  \"custodian\": \"State Street Bank\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bdc5916a-3de9-45ca-97e5-121c178cf843",
+              "name": "Fund not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "funds",
+                    ":fundId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fundId",
+                      "description": "(Required) Unique fund identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"UNAUTHORIZED\",\n  \"message\": \"Access token is missing or invalid.\",\n  \"correlationId\": \"f194e217-d66e-a288-ee08-b742436ac20c\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.statestreet.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "portfolio:read positions:read transactions:read performance:read risk:read"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.statestreet.com/oauth/token"
+      },
+      {
+        "key": "grant_type",
+        "value": "client_credentials"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "b28411d7-ab96-40fc-b047-00cbeaaf7b94",
+    "name": "State Street Alpha Data Platform Baskets Funds API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The State Street Alpha Data Platform API provides institutional investment managers, asset owners, and wealth managers with programmatic access to their portfolio data across the front-to-back Alpha investment management platform. The API enables clients to retrieve portfolio positions, holdings, investable cash, pledged collateral, securities on loan, risk exposures, performance measurement, and transaction history in near real-time. Built on Snowflake and Microsoft Azure, the Alpha Data Platform provides intraday visibility across geographies, asset classes, and counterparties. Authentication uses OAuth 2.0 Client Credentials (RFC 6749 Section 4.4.2). All requests require the X-Correlation-ID header for request tracing. The API follows REST conventions with JSON as the default data format, versioned using Major.Minor.Patch semantics.\n\nContact Support:\n Name: State Street API Support\n Email: api-support@statestreet.com",
+      "type": "text/plain"
+    }
+  }
+}

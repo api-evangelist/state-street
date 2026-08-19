@@ -1,0 +1,263 @@
+{
+  "item": [
+    {
+      "id": "62cf0d8b-203b-4150-9777-365dc09ad1fa",
+      "name": "Performance",
+      "description": {
+        "content": "Performance measurement and attribution operations",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f749c1be-5846-4d55-98ec-e7c0b5b0102b",
+          "name": "Get Portfolio Performance",
+          "request": {
+            "name": "Get Portfolio Performance",
+            "description": {
+              "content": "Retrieve performance measurement and attribution data for a portfolio over a specified period. Returns time-weighted returns, money-weighted returns, and benchmark-relative performance. Supports daily and monthly calculation frequencies using industry-standard methodologies for all asset types.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "portfolios",
+                ":portfolioId",
+                "performance"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "startDate",
+                  "value": "<date>",
+                  "description": "(Required) Performance measurement start date"
+                },
+                {
+                  "disabled": false,
+                  "key": "endDate",
+                  "value": "<date>",
+                  "description": "(Required) Performance measurement end date"
+                },
+                {
+                  "disabled": false,
+                  "key": "frequency",
+                  "value": "MONTHLY",
+                  "description": "Performance calculation frequency"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "portfolioId",
+                  "description": "(Required) Unique portfolio identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Client-provided correlation ID for request tracing",
+                "key": "X-Correlation-ID",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e8f94e5a-882a-45cf-b756-5f755b9631c8",
+              "name": "Portfolio performance data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios",
+                    ":portfolioId",
+                    "performance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDate",
+                      "value": "2026-01-01"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2026-04-30"
+                    },
+                    {
+                      "key": "frequency",
+                      "value": "MONTHLY"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "portfolioId",
+                      "description": "(Required) Unique portfolio identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "550e8400-e29b-41d4-a716-446655440000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"portfolioId\": \"PORT-12345\",\n  \"startDate\": \"1954-09-04\",\n  \"endDate\": \"1947-02-26\",\n  \"frequency\": \"MONTHLY\",\n  \"portfolioReturn\": 0.0743,\n  \"benchmarkReturn\": 0.0681,\n  \"activeReturn\": 0.0062,\n  \"periods\": [\n    {\n      \"periodStart\": \"1988-03-08\",\n      \"periodEnd\": \"1997-06-18\",\n      \"portfolioReturn\": 9440.567702617327,\n      \"benchmarkReturn\": 1530.8977405750225\n    },\n    {\n      \"periodStart\": \"1967-11-04\",\n      \"periodEnd\": \"1990-10-28\",\n      \"portfolioReturn\": 5123.0273625951,\n      \"benchmarkReturn\": 1141.7604469625853\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4e41be74-9b1a-4cb6-9546-10fd57d4b2d3",
+              "name": "Portfolio not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolios",
+                    ":portfolioId",
+                    "performance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDate",
+                      "value": "2026-01-01"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2026-04-30"
+                    },
+                    {
+                      "key": "frequency",
+                      "value": "MONTHLY"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "portfolioId",
+                      "description": "(Required) Unique portfolio identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Client-provided correlation ID for request tracing",
+                    "key": "X-Correlation-ID",
+                    "value": "550e8400-e29b-41d4-a716-446655440000"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"UNAUTHORIZED\",\n  \"message\": \"Access token is missing or invalid.\",\n  \"correlationId\": \"6ebe3575-a8c3-479c-fd7f-e909ea3bfcc9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.statestreet.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "portfolio:read positions:read transactions:read performance:read risk:read"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.statestreet.com/oauth/token"
+      },
+      {
+        "key": "grant_type",
+        "value": "client_credentials"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f04fa16b-14b2-429a-9273-2504cb408e87",
+    "name": "State Street Alpha Data Platform Baskets Performance API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The State Street Alpha Data Platform API provides institutional investment managers, asset owners, and wealth managers with programmatic access to their portfolio data across the front-to-back Alpha investment management platform. The API enables clients to retrieve portfolio positions, holdings, investable cash, pledged collateral, securities on loan, risk exposures, performance measurement, and transaction history in near real-time. Built on Snowflake and Microsoft Azure, the Alpha Data Platform provides intraday visibility across geographies, asset classes, and counterparties. Authentication uses OAuth 2.0 Client Credentials (RFC 6749 Section 4.4.2). All requests require the X-Correlation-ID header for request tracing. The API follows REST conventions with JSON as the default data format, versioned using Major.Minor.Patch semantics.\n\nContact Support:\n Name: State Street API Support\n Email: api-support@statestreet.com",
+      "type": "text/plain"
+    }
+  }
+}

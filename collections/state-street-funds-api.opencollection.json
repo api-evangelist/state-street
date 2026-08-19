@@ -1,0 +1,89 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "State Street Alpha Data Platform Baskets Funds API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://api.statestreet.com/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Funds",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List ETF Funds",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.statestreet.com/v1/funds",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "market",
+                "value": "",
+                "type": "query",
+                "description": "Filter by market/exchange"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve a list of ETF funds available for creation and redemption through Fund Connect. Returns fund identifiers, names, tickers, base currencies, and authorized participant entitlements."
+        },
+        {
+          "info": {
+            "name": "Get ETF Fund",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.statestreet.com/v1/funds/:fundId",
+            "headers": [
+              {
+                "name": "X-Correlation-ID",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "fundId",
+                "value": "",
+                "type": "path",
+                "description": "Unique fund identifier"
+              }
+            ]
+          },
+          "docs": "Retrieve detailed information for a specific ETF fund including its composition requirements, minimum creation/redemption unit size, and authorized participant eligibility."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
