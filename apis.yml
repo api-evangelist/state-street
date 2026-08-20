@@ -54,6 +54,12 @@ apis:
   humanURL: https://www.statestreet.com/us/en/solutions/investment-accounting
   baseURL: https://api.statestreet.com/v1/accounting
   tags:
+  - Financial-Services
+  - Accounting
+  - NAV
+  - Performance
+  - Institutional
+  tags_raw:
   - Financial Services
   - Accounting
   - NAV
@@ -73,6 +79,12 @@ apis:
   humanURL: https://www.statestreet.com/us/en/asset-owner/solutions/performance-and-analytics
   baseURL: https://api.statestreet.com/v1/analytics
   tags:
+  - Financial-Services
+  - Analytics
+  - Performance
+  - Risk
+  - Institutional
+  tags_raw:
   - Financial Services
   - Analytics
   - Performance
@@ -91,6 +103,12 @@ apis:
   humanURL: https://developer.statestreet.com/get-started-browser
   baseURL: https://api.statestreet.com/v1
   tags:
+  - Financial-Services
+  - Developers
+  - Reference
+  - Onboarding
+  - Sample
+  tags_raw:
   - Financial Services
   - Developer
   - Reference
@@ -133,6 +151,8 @@ apis:
   humanURL: https://developer.statestreet.com/api-overview
   baseURL: https://api.statestreet.com/v1
   tags:
+  - Order
+  tags_raw:
   - Orders
   properties:
   - type: OpenAPI
@@ -161,6 +181,8 @@ apis:
   humanURL: https://developer.statestreet.com/api-overview
   baseURL: https://api.statestreet.com/v1
   tags:
+  - Portfolio
+  tags_raw:
   - Portfolios
   properties:
   - type: OpenAPI
@@ -203,6 +225,8 @@ apis:
   humanURL: https://developer.statestreet.com/api-overview
   baseURL: https://api.statestreet.com/v1
   tags:
+  - Transaction
+  tags_raw:
   - Transactions
   properties:
   - type: OpenAPI
