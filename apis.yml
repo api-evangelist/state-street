@@ -236,6 +236,9 @@ apis:
   - type: Documentation
     url: https://developer.statestreet.com/
 common:
+  - type: CapabilityMap
+    url: capabilities/state-street-capability-edges.yml
+    name: State Street Business Capability Map
   - type: Blog
     url: https://www.statestreet.com/content/statestreet/us/en/insights
   - type: AgenticAccess
