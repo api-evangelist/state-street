@@ -137,6 +137,8 @@ apis:
   humanURL: https://developer.statestreet.com/api-overview
   baseURL: https://api.statestreet.com/v1
   tags:
+  - Fund
+  tags_raw:
   - Funds
   properties:
   - type: OpenAPI
