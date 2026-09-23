@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: State Street Alpha Data Platform Baskets Orders API
-  description: The State Street Alpha Data Platform API provides institutional investment managers, asset owners, and wealth managers with programmatic access to their portfolio data across the front-to-back Alpha investment management platform. The API enables clients to retrieve portfolio positions, holdings, investable cash, pledged collateral, securities on loan, risk exposures, performance measurement, and transaction history in near real-time. Built on Snowflake and Microsoft Azure, the Alpha Data Platform provides intraday visibility across geographies, asset classes, and counterparties. Authentication uses OAuth 2.0 Client Credentials (RFC 6749 Section 4.4.2). All requests require the X-Correlation-ID header for request tracing. The API follows REST conventions with JSON as the default data format, versioned using Major.Minor.Patch semantics.
+  title: State Street Fund Connect Orders API
+  description: The State Street Fund Connect API enables authorized participants (APs), ETF fund managers, and custodians to programmatically manage ETF creation and redemption orders through the Fund Connect platform.
   version: 1.0.0
   contact:
     name: State Street API Support
@@ -12,15 +12,13 @@ info:
     name: Proprietary
     url: https://developer.statestreet.com/api-platform-standards
 servers:
-- url: https://api.statestreet.com/v1
-  description: State Street API Production
+- url: https://api.statestreet.com/v1/fund-connect
+  description: State Street Fund Connect API Production
 security:
 - OAuth2:
-  - portfolio:read
-  - positions:read
-  - transactions:read
-  - performance:read
-  - risk:read
+  - fund-connect:orders:read
+  - fund-connect:orders:write
+  - fund-connect:baskets:read
 tags:
 - name: Orders
   description: ETF creation and redemption order operations
@@ -181,53 +179,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    OrderRequest:
-      type: object
-      required:
-      - fundId
-      - orderType
-      - units
-      description: ETF creation or redemption order request
-      properties:
-        fundId:
-          type: string
-          description: Fund identifier
-          example: ETF-SPDR-SPY
-        orderType:
-          type: string
-          description: Order type
-          enum:
-          - CREATION
-          - REDEMPTION
-          example: CREATION
-        units:
-          type: integer
-          description: Number of creation/redemption units
-          minimum: 1
-          example: 5
-        settlementType:
-          type: string
-          description: Settlement instruction type
-          enum:
-          - IN_KIND
-          - CASH
-          default: IN_KIND
-        clientOrderId:
-          type: string
-          description: Client-provided reference ID
-          example: CLIENT-ORDER-98765
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-          example: UNAUTHORIZED
-        message:
-          type: string
-          example: Access token is missing or invalid.
-        correlationId:
-          type: string
-          format: uuid
     Order:
       type: object
       description: An ETF creation or redemption order
@@ -275,6 +226,53 @@ components:
           type: string
           format: date
           description: Expected settlement date
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: UNAUTHORIZED
+        message:
+          type: string
+          example: Access token is missing or invalid.
+        correlationId:
+          type: string
+          format: uuid
+    OrderRequest:
+      type: object
+      required:
+      - fundId
+      - orderType
+      - units
+      description: ETF creation or redemption order request
+      properties:
+        fundId:
+          type: string
+          description: Fund identifier
+          example: ETF-SPDR-SPY
+        orderType:
+          type: string
+          description: Order type
+          enum:
+          - CREATION
+          - REDEMPTION
+          example: CREATION
+        units:
+          type: integer
+          description: Number of creation/redemption units
+          minimum: 1
+          example: 5
+        settlementType:
+          type: string
+          description: Settlement instruction type
+          enum:
+          - IN_KIND
+          - CASH
+          default: IN_KIND
+        clientOrderId:
+          type: string
+          description: Client-provided reference ID
+          example: CLIENT-ORDER-98765
     OrderListResponse:
       type: object
       properties:
@@ -298,13 +296,10 @@ components:
   securitySchemes:
     OAuth2:
       type: oauth2
-      description: OAuth 2.0 Client Credentials flow per RFC 6749 Section 4.4.2. Requires multifactor authentication for all user access.
       flows:
         clientCredentials:
           tokenUrl: https://api.statestreet.com/oauth/token
           scopes:
-            portfolio:read: Read portfolio metadata and account information
-            positions:read: Read portfolio positions and holdings
-            transactions:read: Read transaction history
-            performance:read: Read performance measurement and attribution data
-            risk:read: Read risk analytics and exposure data
+            fund-connect:orders:read: Read ETF order history and status
+            fund-connect:orders:write: Submit and cancel ETF orders
+            fund-connect:baskets:read: Read ETF portfolio basket compositions

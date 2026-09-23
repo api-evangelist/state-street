@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: State Street Alpha Data Platform Baskets Portfolios API
-  description: The State Street Alpha Data Platform API provides institutional investment managers, asset owners, and wealth managers with programmatic access to their portfolio data across the front-to-back Alpha investment management platform. The API enables clients to retrieve portfolio positions, holdings, investable cash, pledged collateral, securities on loan, risk exposures, performance measurement, and transaction history in near real-time. Built on Snowflake and Microsoft Azure, the Alpha Data Platform provides intraday visibility across geographies, asset classes, and counterparties. Authentication uses OAuth 2.0 Client Credentials (RFC 6749 Section 4.4.2). All requests require the X-Correlation-ID header for request tracing. The API follows REST conventions with JSON as the default data format, versioned using Major.Minor.Patch semantics.
+  title: State Street Alpha Data Platform Portfolios API
+  description: The State Street Alpha Data Platform API provides institutional investment managers, asset owners, and wealth managers with programmatic access to their portfolio data across the front-to-back Alpha investment management platform.
   version: 1.0.0
   contact:
     name: State Street API Support
@@ -123,21 +123,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 components:
+  parameters:
+    XCorrelationId:
+      name: X-Correlation-ID
+      in: header
+      description: Client-provided correlation ID for request tracing
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: 550e8400-e29b-41d4-a716-446655440000
   schemas:
-    PortfolioListResponse:
-      type: object
-      description: Paginated list of portfolios
-      properties:
-        portfolios:
-          type: array
-          items:
-            $ref: '#/components/schemas/Portfolio'
-        nextPageToken:
-          type: string
-          description: Token to retrieve the next page of results
-        totalCount:
-          type: integer
-          description: Total number of portfolios accessible
     Portfolio:
       type: object
       description: A State Street Alpha portfolio
@@ -176,6 +172,20 @@ components:
           type: string
           description: Custodian holding the assets
           example: State Street Bank
+    PortfolioListResponse:
+      type: object
+      description: Paginated list of portfolios
+      properties:
+        portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Portfolio'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results
+        totalCount:
+          type: integer
+          description: Total number of portfolios accessible
     Error:
       type: object
       description: Error response
@@ -192,16 +202,6 @@ components:
           type: string
           description: Request correlation ID for support reference
           format: uuid
-  parameters:
-    XCorrelationId:
-      name: X-Correlation-ID
-      in: header
-      description: Client-provided correlation ID for request tracing
-      required: false
-      schema:
-        type: string
-        format: uuid
-        example: 550e8400-e29b-41d4-a716-446655440000
   securitySchemes:
     OAuth2:
       type: oauth2

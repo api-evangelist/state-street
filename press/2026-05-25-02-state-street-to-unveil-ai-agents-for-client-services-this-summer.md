@@ -1,7 +1,9 @@
 ---
 title: State Street to unveil AI agents for client services this summer
 url: https://www.bizjournals.com/boston/news/2026/04/17/state-street-ai-tools-launching-summer-2026.html
-date: '2026-05-25'
+published: '2026-04-17'
+date_basis: url-derived
+harvested: '2026-05-25'
 query: '"State Street Corp." press release artificial intelligence'
 position: 2
 source: serpapi-google

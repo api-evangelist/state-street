@@ -1,7 +1,9 @@
 ---
 title: State Street (STT) Q1 2026 Earnings Call Transcript
 url: https://fortune.com/company/state-street-corp/earnings/q1-2026/
-date: '2026-05-25'
+published: ''
+date_basis: harvested
+harvested: '2026-05-25'
 query: '"State Street Corp." press release artificial intelligence'
 position: 4
 source: serpapi-google

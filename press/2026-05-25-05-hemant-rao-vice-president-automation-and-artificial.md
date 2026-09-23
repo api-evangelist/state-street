@@ -1,7 +1,9 @@
 ---
 title: Hemant Rao - Vice President, Automation and Artificial ...
 url: https://www.linkedin.com/in/hemantrao0825
-date: '2026-05-25'
+published: ''
+date_basis: harvested
+harvested: '2026-05-25'
 query: '"State Street Corp." press release artificial intelligence'
 position: 5
 source: serpapi-google
